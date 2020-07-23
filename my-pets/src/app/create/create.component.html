@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>Add {{resource}}</h2>
+
+<mat-dialog-content>
+    <form [formGroup]="myFormGroup">
+
+        <div *ngFor="let key of form">
+            <ng-container [ngSwitch]="key.value.type">
+            <mat-form-field *ngSwitchCase="'string'" appearance="standard">
+                <mat-label>{{key.name}}</mat-label>
+                <input matInput formControlName="{{key.name}}">
+                <mat-placeholder>{{key.name}}</mat-placeholder>
+            </mat-form-field>
+            <mat-form-field *ngSwitchCase="'text'" appearance="standard">
+                <mat-label>{{key.name}}</mat-label>
+                <textarea matInput formControlName="{{key.name}}"></textarea>
+                <mat-placeholder>{{key.name}}</mat-placeholder>
+            </mat-form-field>
+            <mat-form-field *ngSwitchCase="'number'" appearance="standard">
+                <mat-label>{{key.name}}</mat-label>
+                <input matInput type="number" formControlName="{{key.name}}">
+                <mat-placeholder>{{key.name}}</mat-placeholder>
+            </mat-form-field>
+            <ng-container *ngSwitchCase="'boolean'" appearance="standard">
+                
+                <mat-checkbox  formControlName="{{key.name}}">{{key.name}}</mat-checkbox>
+                
+            </ng-container>
+            <mat-form-field *ngSwitchCase="'objectid'" appearance="standard">
+                <mat-label>{{key.name}}</mat-label>
+                <mat-select formControlName="{{key.name}}">
+                    <mat-option *ngFor="let item of options[key.name]" [value]="item._id||item">{{item._name||item}}</mat-option>
+                </mat-select>
+                <mat-placeholder>{{key.name}}</mat-placeholder>
+            </mat-form-field>
+            <ng-container *ngSwitchCase="'media'" appearance="standard">
+                <mat-label>{{key.name}} </mat-label>
+                <input mat-button type="file" class="form-control-file" (change)="uploadFile($event,key.name)" accept="image/*">
+            </ng-container>
+        </ng-container>
+        </div>
+
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-raised-button color="accent" (click)="save()">Save</button>
+    <button mat-button type="button" color="primary" matDialogClose>Close</button>
+
+</mat-dialog-actions>

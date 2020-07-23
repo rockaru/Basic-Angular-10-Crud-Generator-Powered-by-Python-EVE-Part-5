@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Details</h2>
+
+<mat-dialog-content>
+    <form [formGroup]="myFormGroup">
+
+        <div *ngFor="let key of form">
+            <span>{{key.name}}</span>
+            <ng-container [ngSwitch]="key.value.type">
+                <p *ngSwitchCase="'objectid'">
+                  {{objectKeys(item[key.name])}}
+                </p>
+                <p *ngSwitchDefault>
+                  {{item[key.name]}}
+                </p>
+                
+              </ng-container>
+            
+
+        </div>
+
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-raised-button color="accent" (click)="update(item)">Update</button>
+    <button mat-raised-button color="warn" (click)="delete(item)">Delete</button>
+    <button mat-button color="primary" matDialogClose>Close</button>
+
+</mat-dialog-actions>
