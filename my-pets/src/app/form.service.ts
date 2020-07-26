@@ -47,9 +47,13 @@ export class FormService {
         case 'create':
           if (data[item].create) {
             items[item] = data[item];
-            if (data[item].type == "objectid") {
+            if (data[item].input == "select") {
               data[item].options = this.loadOptions(resource, item, data[item].data_relation.resource)
 
+            }
+            if(data[item].input=="selectmulti"){
+              //console.log(data[item])
+              data[item].options = this.loadOptions(resource,item,data[item].schema.schema["name"].data_relation.resource)
             }
           }
           break;
@@ -61,7 +65,7 @@ export class FormService {
         case 'update':
           if (data[item].update) {
             items[item] = data[item];
-            if (data[item].type == "objectid") {
+            if (data[item].input == "select") {
               data[item].options = this.loadOptions(resource, item, data[item].data_relation.resource)
             }
           }
@@ -88,7 +92,7 @@ export class FormService {
       for (let item in data) {
 
         items.push({
-          "_name": data[item].name,
+          "name": data[item].name,
           "_id": data[item]._id
         })
 
@@ -107,7 +111,7 @@ export class FormService {
         form = this.setStructure(resource, scope, form)
         const embedded = {}
         for (let item in form) {
-          if (form[item].value.type == 'objectid') {
+          if (form[item].value.input == 'select') {
             embedded[form[item].name] = 1
           }
         }
@@ -120,7 +124,7 @@ export class FormService {
     } else {
       const embedded = {}
       for (let item in form) {
-        if (form[item].value.type == 'objectid') {
+        if (form[item].value.input== 'select') {
           embedded[form[item].name] = 1
         }
       }
@@ -185,7 +189,7 @@ export class FormService {
       data => {
         if (data) {
           console.log(data)
-          this.dataService.add(resource, data)
+          
         }
       }
     )

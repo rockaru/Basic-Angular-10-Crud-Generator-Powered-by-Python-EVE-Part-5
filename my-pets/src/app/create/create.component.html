@@ -4,41 +4,85 @@
     <form [formGroup]="myFormGroup">
 
         <div *ngFor="let key of form">
-            <ng-container [ngSwitch]="key.value.type">
-            <mat-form-field *ngSwitchCase="'string'" appearance="standard">
-                <mat-label>{{key.name}}</mat-label>
-                <input matInput formControlName="{{key.name}}">
-                <mat-placeholder>{{key.name}}</mat-placeholder>
-            </mat-form-field>
+            <ng-container [ngSwitch]="key.value.input">
             <mat-form-field *ngSwitchCase="'text'" appearance="standard">
                 <mat-label>{{key.name}}</mat-label>
+                <input matInput formControlName="{{key.name}}">
+                <mat-icon matSuffix>text_format</mat-icon>
+                <mat-placeholder>{{key.name}}</mat-placeholder>
+            </mat-form-field>
+            <mat-form-field *ngSwitchCase="'textarea'" appearance="standard">
+                <mat-label>{{key.name}}</mat-label>
                 <textarea matInput formControlName="{{key.name}}"></textarea>
+                <mat-icon matSuffix>text_fields</mat-icon>
+
                 <mat-placeholder>{{key.name}}</mat-placeholder>
             </mat-form-field>
             <mat-form-field *ngSwitchCase="'number'" appearance="standard">
                 <mat-label>{{key.name}}</mat-label>
                 <input matInput type="number" formControlName="{{key.name}}">
+                <mat-icon matSuffix>exposure_zero</mat-icon>
+
                 <mat-placeholder>{{key.name}}</mat-placeholder>
             </mat-form-field>
-            <ng-container *ngSwitchCase="'boolean'" appearance="standard">
+            <ng-container *ngSwitchCase="'checkbox'" appearance="standard">
                 
                 <mat-checkbox  formControlName="{{key.name}}">{{key.name}}</mat-checkbox>
                 
             </ng-container>
-            <mat-form-field *ngSwitchCase="'objectid'" appearance="standard">
+            <mat-form-field *ngSwitchCase="'select'" appearance="standard">
                 <mat-label>{{key.name}}</mat-label>
                 <mat-select formControlName="{{key.name}}">
-                    <mat-option *ngFor="let item of options[key.name]" [value]="item._id||item">{{item._name||item}}</mat-option>
+                    <mat-option *ngFor="let item of options[key.name]" [value]="item._id||item">{{item.name||item}}</mat-option>
                 </mat-select>
+                <mat-icon matSuffix>note_add</mat-icon>
+
                 <mat-placeholder>{{key.name}}</mat-placeholder>
             </mat-form-field>
-            <ng-container *ngSwitchCase="'media'" appearance="standard">
-                <mat-label>{{key.name}} </mat-label>
-                <input mat-button type="file" class="form-control-file" (change)="uploadFile($event,key.name)" accept="image/*">
+            <mat-form-field class="columns" *ngSwitchCase="'image'" appearance="standard">
+                <mat-label *ngIf="selectedImages; else newImage">{{selectedImages.item(0).name}}</mat-label>
+                <ng-template #newImage >
+                    <mat-label>{{key.name}} </mat-label>
+                </ng-template>
+                <input matInput disabled (click)="imageInput.click()">
+                <button mat-icon-button matSuffix (click)="imageInput.click()">
+                    <mat-icon>image</mat-icon>
+                </button>
+                <input hidden #imageInput mat-button type="file" (change)="uploadImage($event,key.name)" accept="image/*">
+            </mat-form-field>
+            <mat-form-field class="columns" *ngSwitchCase="'file'" #imageInput appearance="standard">
+                
+                <mat-label *ngIf="selectedFiles; else newFile">{{selectedFiles.item(0).name}}</mat-label>
+                <ng-template #newFile >
+                    <mat-label>{{key.name}} </mat-label>
+                </ng-template>
+                <input matInput disabled (click)="fileInput.click()">
+                <button mat-icon-button matSuffix (click)="fileInput.click()">
+                    <mat-icon>attach_file</mat-icon>
+                </button>
+                <input hidden (change)="uploadFile($event,key.name)" #fileInput type="file">
+            </mat-form-field>
+            <ng-container *ngSwitchCase="'selectradio'" appearance="standard">
+                <label id="label-{{key.name}}">{{key.name}}</label>
+                <mat-radio-group class="radio-group" aria-labelledby="label-{{key.name}}" formControlName="{{key.name}}">
+                    
+                        <mat-radio-button class="radio-button" *ngFor="let i of key.value.allowed" value="{{i}}">{{i}}</mat-radio-button>
+                    
+                </mat-radio-group>
+                
             </ng-container>
+            
+            <ng-container *ngSwitchCase="'selectmulti'" appearance="standard">
+                <label id="label-{{key.name}}">{{key.name}}</label>
+        <lib-material-dual-listbox [source]="options[key.name]" [filter]="true" [(destination)]="selected[key.name]"></lib-material-dual-listbox>
+                
+                
+            </ng-container>   
+            
         </ng-container>
+        
         </div>
-
+        {{testD}}
     </form>
 </mat-dialog-content>
 

@@ -22,21 +22,13 @@ export class DataService {
     return this.httpClient.get(`api/${resource}/${id}`).pipe()
   }
 
-  public add(resource, data): Promise<any> {
-    return new Promise((resolve, reject) => {
-
-      this.httpClient.post(`api/${resource}`, data).pipe().subscribe(data => {
-        resolve(this.socketService.sendSocket(resource))
-      })
-    })
+  public add(resource, data) {
+    return this.httpClient.post(`api/${resource}`, data).pipe()
   }
 
-  public update(resource, id, data): Promise<any> {
-    return new Promise((resolve, reject) => {
-      return this.httpClient.patch(`api/${resource}/${id}`, data).pipe().subscribe(data => {
-        resolve(this.socketService.sendUpdateSocket(resource,id))
-      })
-    })
+  public update(resource, id, data) {
+    
+      return this.httpClient.patch(`api/${resource}/${id}`, data).pipe()
   }
 
   public delete(resource, id): Promise<any> {

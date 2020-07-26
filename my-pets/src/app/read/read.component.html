@@ -18,10 +18,10 @@
 
             <a (click)="details(item)">
               <ng-container [ngSwitch]="key.value.type">
-                <ng-container *ngSwitchCase="'objectid'">
+                <ng-container *ngSwitchCase="'select'">
                   {{objectKeys(item[key.name])}}
                 </ng-container>
-                <ng-container *ngSwitchCase="'media'">
+                <ng-container *ngSwitchCase="'image'">
                   <ng-container *ngIf="item[key.name]">
                   <img [src]="loadMedia(item[key.name])">
                 </ng-container>

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { ReadComponent } from './read/read.component';
 import { CreateComponent } from './create/create.component';
-import { DataService } from './data.service'
 import { FormService } from './form.service'
 import { SocketService } from './socket.service';
 
@@ -17,7 +15,6 @@ export class AppComponent implements OnInit {
 
   constructor(
     private socketService:SocketService,
-    private dataService: DataService,
     private formService: FormService,
   ) {
 

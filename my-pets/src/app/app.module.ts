@@ -13,6 +13,9 @@ import {MatInputModule} from '@angular/material/input'
 import {MatButtonModule} from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatIconModule} from '@angular/material/icon';
+import {MaterialDualListboxModule} from 'material-dual-listbox'
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -42,6 +45,9 @@ import { DetailsComponent } from './details/details.component';
     MatButtonModule,
     MatSelectModule,
     MatCheckboxModule,
+    MatRadioModule,
+    MatIconModule,
+    MaterialDualListboxModule,
     FormsModule
   ],
   providers: [
