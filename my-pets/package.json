@@ -18,11 +18,11 @@
     "@angular/core": "^10.0.5",
     "@angular/flex-layout": "^10.0.0-beta.32",
     "@angular/forms": "~10.0.0",
-    "@angular/material": "^10.1.0",
+    "@angular/material": "^10.0.5",
     "@angular/platform-browser": "~10.0.0",
     "@angular/platform-browser-dynamic": "~10.0.0",
     "@angular/router": "~10.0.0",
-    "material-dual-listbox": "^2.0.12",
+    "mea-material-dual-listbox": "^0.1.5",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"
