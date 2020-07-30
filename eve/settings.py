@@ -4,7 +4,7 @@ MONGO_DBNAME = 'apitest1'
 
 RESOURCE_METHODS = ['GET', 'POST', 'DELETE']
 ITEM_METHODS = ['GET', 'PATCH', 'PUT', 'DELETE']
-
+HATEOAS = False
 IF_MATCH = False
 PAGINATION = False
 

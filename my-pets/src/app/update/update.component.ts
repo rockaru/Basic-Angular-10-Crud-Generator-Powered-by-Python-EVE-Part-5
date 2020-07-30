@@ -56,9 +56,15 @@ export class UpdateComponent implements OnInit {
   async loadOptions() {
     for (let key of this.form) {
       if (key.value.input == 'selectmulti') {
+
         await this.dataService.getAll(key.value.schema.data_relation.resource).subscribe(data => {
           this.selected[key.name] = this.item[key.name]
-          this.options[key.name] = data["_items"].filter(x=>!this.item[key.name].includes(x))
+console.log(this.selected[key.name])
+          const c= data["_items"]
+          console.log(c.filter(x=> !this.selected[key.name].includes(x)))
+           this.options[key.name] = c.filter(x=> {
+             return this.selected[key.name].filter(f=> { if(f._id == x._id){return false}})
+           })
         })
       }
       if (key.value.input == 'select') {
