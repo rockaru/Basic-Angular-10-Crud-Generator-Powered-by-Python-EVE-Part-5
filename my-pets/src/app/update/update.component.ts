@@ -32,16 +32,13 @@ export class UpdateComponent implements OnInit {
     this.item = data.item
     this.form =data.form
     console.log(this.item)
-    this.loadOptions()
     for (let key of this.form) {
 
-      if (key.value.input == 'selectmulti') {
-        this.selected[key.name] = this.item[key.name]
-      }
       if (key.value.input == 'list') {
         this.selected[key.name] = this.item[key.name]
       }
     }
+    this.loadOptions()
     this.myFormGroup = this.formService.loadFormGroup(this.form,this.item)
     socketService.joinSocket(this.item._id)
     
@@ -59,8 +56,9 @@ export class UpdateComponent implements OnInit {
   async loadOptions() {
     for (let key of this.form) {
       if (key.value.input == 'selectmulti') {
-        await this.dataService.getAll(key.value.schema.schema["name"].data_relation.resource).subscribe(data => {
-          this.options[key.name] = data["_items"]
+        await this.dataService.getAll(key.value.schema.data_relation.resource).subscribe(data => {
+          this.selected[key.name] = this.item[key.name]
+          this.options[key.name] = data["_items"].filter(x=>!this.item[key.name].includes(x))
         })
       }
       if (key.value.input == 'select') {
@@ -78,6 +76,10 @@ export class UpdateComponent implements OnInit {
     this.dataService.getOne(this.resource,this.item._id).subscribe(data=>{
       this.item=data
     })
+  }
+
+  loadSelected(obj){
+
   }
 
   uploadFile(event,form) {

@@ -58,7 +58,7 @@ export class FormService {
             }
             if(data[item].input=="selectmulti"){
               //console.log(data[item])
-              data[item].options = this.loadOptions(resource,item,data[item].schema.schema["name"].data_relation.resource)
+              data[item].options = this.loadOptions(resource,item,data[item].schema.data_relation.resource)
             }
           }
           break;
@@ -119,6 +119,9 @@ export class FormService {
           if (form[item].value.input == 'select') {
             embedded[form[item].name] = 1
           }
+          if (form[item].value.input == 'selectmulti') {
+            embedded[form[item].name] = 1
+          }
         }
         const res = `${resource}?embedded=${JSON.stringify(embedded)}`
         this.dataService.getAll(res).subscribe((data) => {
@@ -129,7 +132,10 @@ export class FormService {
     } else {
       const embedded = {}
       for (let item in form) {
-        if (form[item].value.input== 'select') {
+        if (form[item].value.input == 'select') {
+          embedded[form[item].name] = 1
+        }
+        if (form[item].value.input == 'selectmulti') {
           embedded[form[item].name] = 1
         }
       }

@@ -57,7 +57,7 @@ export class CreateComponent implements OnInit {
   async loadOptions() {
     for (let key of this.form) {
       if (key.value.input == 'selectmulti') {
-        await this.dataService.getAll(key.value.schema.schema["name"].data_relation.resource).subscribe(data => {
+        await this.dataService.getAll(key.value.schema.data_relation.resource).subscribe(data => {
           this.options[key.name] = data["_items"]
         })
       }
@@ -151,13 +151,14 @@ export class CreateComponent implements OnInit {
           this.dataService.update(this.resource, data["_id"], selected).subscribe(data => console.log(data))
         }
         if (key.value.input == 'list') {
-          const x = `{"${key.name}":${JSON.stringify(this.selected[key.name])}}`
+          let x ={}
+          x[key.name] = this.selected[key.name]
           console.log(x)
 
           this.dataService.update(this.resource, data["_id"], x).subscribe(data => console.log(data))
         }
       }
-
+      this.dialogRef.close("close");
     }
     )
 
@@ -172,9 +173,7 @@ export class CreateComponent implements OnInit {
 console.log(obj)
     for (let item of obj) {
       console.log(item)
-      items[i] = {
-        "name": item._id
-      }
+      items[i] = item._id
       i++
     }
     data[field] = items

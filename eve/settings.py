@@ -1,6 +1,6 @@
 MONGO_HOST = 'localhost'
 MONGO_PORT = 27017
-MONGO_DBNAME = 'apitest'
+MONGO_DBNAME = 'apitest1'
 
 RESOURCE_METHODS = ['GET', 'POST', 'DELETE']
 ITEM_METHODS = ['GET', 'PATCH', 'PUT', 'DELETE']
@@ -146,8 +146,8 @@ dogs = {
             'icon': '',
             'data_relation': {
                 'resource': 'dogBreeds',
-                            'field': '_id',
-                            'embeddable': True
+                'field': '_id',
+                'embeddable': True
             },
             'create': True,
             'read': True,
@@ -244,29 +244,26 @@ dogs = {
             'update': True
         },
         'tags': {
-            'type':'list',
-            'input':'list',
-            'icon':'',
-            'create':True,
-            'read':True,
-            'update':True
+            'type': 'list',
+            'input': 'list',
+            'icon': '',
+            'create': True,
+            'read': True,
+            'update': True
         },
         'colors': {
             'type': 'list',
             'input': 'selectmulti',
             'icon': '',
             'schema': {
-                'type': 'dict',
-                'schema': {
-                        'name': {
-                            'type': 'objectid',
-                            'data_relation': {
-                                'resource': 'colors',
-                                'field': '_id',
-                                'embeddable': True
-                            }
-                        }
+                'type': 'objectid',
+                'data_relation': {
+                    'resource': 'colors',
+                    'field': '_id',
+                    'embeddable': True
                 }
+
+
 
             },
             'create': True,
@@ -277,7 +274,7 @@ dogs = {
 }
 
 colors = {
-    'item_title': 'dog breed',
+    'item_title': 'color',
     'cache_control': 'max-age=0,must-revalidate',
     'cache_expires': 1,
     'additional_lookup': {
@@ -323,9 +320,9 @@ dogBreeds = {
 }
 
 ceva = {
-    'schema':{
-        'name':{
-            'type':'list'
+    'schema': {
+        'name': {
+            'type': 'list'
         }
     }
 }
@@ -336,5 +333,5 @@ DOMAIN = {
     'dogs': dogs,
     'dogBreeds': dogBreeds,
     'colors': colors,
-    'ceva':ceva
+    'ceva': ceva
 }
