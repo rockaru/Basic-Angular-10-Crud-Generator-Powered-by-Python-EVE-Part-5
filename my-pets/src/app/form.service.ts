@@ -27,7 +27,12 @@ export class FormService {
     } else {
 
       for (let element of form) {
-        group[element.name] = new FormControl('')
+        if(element.value.input=="list"){
+        group[element.name] = new FormControl('[]')
+        }else{
+          group[element.name] = new FormControl('')
+
+        }
       }
     }
     const formGroup = new FormGroup(group)
@@ -48,7 +53,7 @@ export class FormService {
           if (data[item].create) {
             items[item] = data[item];
             if (data[item].input == "select") {
-              data[item].options = this.loadOptions(resource, item, data[item].data_relation.resource)
+              //data[item].options = this.loadOptions(resource, item, data[item].data_relation.resource)
 
             }
             if(data[item].input=="selectmulti"){

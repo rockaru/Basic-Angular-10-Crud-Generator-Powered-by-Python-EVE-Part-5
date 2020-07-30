@@ -25,9 +25,75 @@
 
                 <mat-placeholder>{{key.name}}</mat-placeholder>
             </mat-form-field>
+            <mat-form-field *ngSwitchCase="'email'" appearance="standard">
+                <mat-label>{{key.name}}</mat-label>
+                <input matInput type="email" formControlName="{{key.name}}">
+                <mat-icon matSuffix>email</mat-icon>
+
+                <mat-placeholder>{{key.name}}</mat-placeholder>
+            </mat-form-field>
+            <mat-form-field *ngSwitchCase="'date'" appearance="standard">
+                <mat-label>{{key.name}}</mat-label>
+                <input matInput type="date" formControlName="{{key.name}}">
+                <mat-icon matSuffix></mat-icon>
+
+                <mat-placeholder>{{key.name}}</mat-placeholder>
+            </mat-form-field>
+            
+            <mat-form-field *ngSwitchCase="'datetime'" appearance="standard">
+                <mat-label>{{key.name}}</mat-label>
+                <input matInput type="datetime-local" formControlName="{{key.name}}">
+                <mat-icon matSuffix></mat-icon>
+
+                <mat-placeholder>{{key.name}}</mat-placeholder>
+            </mat-form-field>
+            <mat-form-field *ngSwitchCase="'tel'" appearance="standard">
+                <mat-label>{{key.name}}</mat-label>
+                <input matInput type="tel" formControlName="{{key.name}}">
+                <mat-icon matSuffix>phone</mat-icon>
+
+                <mat-placeholder>{{key.name}}</mat-placeholder>
+            </mat-form-field>
+            <mat-form-field *ngSwitchCase="'password'" appearance="standard">
+                <mat-label>{{key.name}}</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" formControlName="{{key.name}}">
+    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+
+                <mat-placeholder>{{key.name}}</mat-placeholder>
+            </mat-form-field>
+            <mat-form-field *ngSwitchCase="'url'" appearance="standard">
+                <mat-label>{{key.name}}</mat-label>
+                <input matInput type="url" formControlName="{{key.name}}">
+                <mat-icon matSuffix>link</mat-icon>
+
+                <mat-placeholder>{{key.name}}</mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field *ngSwitchCase="'list'" appearance="standard">
+                <mat-label>{{key.name}}</mat-label>
+                
+                <mat-chip-list #chipList aria-label="{{key.name}} selection" formControlName="{{key.name}}">
+                  <mat-chip *ngFor="let item of selected[key.name]" [selectable]="selectable"
+                           [removable]="removable" (removed)="remove(key,item)">
+                    {{item}}
+                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                  </mat-chip>
+                  <input placeholder="New {{key.name}}..."
+                         [matChipInputFor]="chipList"
+                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                         [matChipInputAddOnBlur]="addOnBlur"
+                         (matChipInputTokenEnd)="add(key,$event)">
+                </mat-chip-list>
+                <mat-icon matSuffix>filter_vintage</mat-icon>
+
+              </mat-form-field>
+            
             <ng-container *ngSwitchCase="'checkbox'" appearance="standard">
                 
-                <mat-checkbox  formControlName="{{key.name}}">{{key.name}}</mat-checkbox>
+                
+                <mat-icon matSuffix>filter_vintage</mat-icon> <mat-checkbox  formControlName="{{key.name}}">{{key.name}}</mat-checkbox>
                 
             </ng-container>
             <mat-form-field *ngSwitchCase="'select'" appearance="standard">
@@ -50,6 +116,7 @@
                 </button>
                 <input hidden #imageInput mat-button type="file" (change)="uploadImage($event,key.name)" accept="image/*">
             </mat-form-field>
+            
             <mat-form-field class="columns" *ngSwitchCase="'file'" #imageInput appearance="standard">
                 
                 <mat-label *ngIf="selectedFiles; else newFile">{{selectedFiles.item(0).name}}</mat-label>
@@ -74,15 +141,13 @@
             
             <ng-container *ngSwitchCase="'selectmulti'" appearance="standard">
                 <label id="label-{{key.name}}">{{key.name}}</label>
-        <lib-material-dual-listbox [source]="options[key.name]" [filter]="true" [(destination)]="selected[key.name]"></lib-material-dual-listbox>
-                
+        <material-dual-listbox [(source)]="options[key.name]" [filter]="true" [(destination)]="selected[key.name]" (destinationChange)="test($event)"></material-dual-listbox>
                 
             </ng-container>   
             
         </ng-container>
         
         </div>
-        {{testD}}
     </form>
 </mat-dialog-content>
 

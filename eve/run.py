@@ -16,6 +16,9 @@ class MyValidator(Validator):
         def _validate_input(self, alias, field, value):
                 """ {'type': 'string'} """
                 pass
+        def _validate_icon(self,alias,field,value):
+                """ {'type':'string'} """
+                pass
                         
 
 app = Eve(validator=MyValidator)

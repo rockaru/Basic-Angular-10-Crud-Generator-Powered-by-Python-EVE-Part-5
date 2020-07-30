@@ -16,6 +16,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatIconModule} from '@angular/material/icon';
 import {MaterialDualListboxModule} from 'mea-material-dual-listbox'
+import {MatChipsModule} from '@angular/material/chips';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -47,6 +48,7 @@ import { DetailsComponent } from './details/details.component';
     MatCheckboxModule,
     MatRadioModule,
     MatIconModule,
+    MatChipsModule,
     MaterialDualListboxModule,
     FormsModule
   ],

@@ -123,15 +123,17 @@ dogs = {
         'name': {
             'type': 'string',
             'input': 'text',
+            'icon': '',
             'minlength': 1,
             'maxlength': 10,
             'create': True,
             'read': True,
-            'update': False
+            'update': True
         },
         'age': {
             'type': 'number',
             'input': 'number',
+            'icon': '',
             'minlength': 1,
             'maxlength': 2,
             'create': True,
@@ -141,6 +143,7 @@ dogs = {
         'breed': {
             'type': 'objectid',
             'input': 'select',
+            'icon': '',
             'data_relation': {
                 'resource': 'dogBreeds',
                             'field': '_id',
@@ -148,18 +151,20 @@ dogs = {
             },
             'create': True,
             'read': True,
-            'update': False
+            'update': True
         },
         'friendly': {
             'type': 'boolean',
             'input': 'checkbox',
+            'icon': '',
             'create': True,
             'read': True,
-            'update': False
+            'update': True
         },
         'description': {
             'type': 'string',
             'input': 'textarea',
+            'icon': '',
             'minlength': 1,
             'maxlength': 200,
             'create': True,
@@ -169,6 +174,7 @@ dogs = {
         'photo': {
             'type': 'media',
             'input': 'image',
+            'icon': '',
             'create': True,
             'read': True,
             'update': True
@@ -176,6 +182,7 @@ dogs = {
         'file': {
             'type': 'media',
             'input': 'file',
+            'icon': '',
             'create': True,
             'read': True,
             'update': True
@@ -183,14 +190,71 @@ dogs = {
         'tail': {
             'type': 'string',
             'input': 'selectradio',
+            'icon': '',
             'allowed': ['long', 'short'],
             'create': True,
             'read': True,
             'update': True
         },
+        'email': {
+            'type': 'string',
+            'input': 'email',
+            'icon': '',
+            'minlength': 1,
+            'maxlength': 10,
+            'create': True,
+            'read': True,
+            'update': True
+        },
+        'password': {
+            'type': 'string',
+            'input': 'password',
+            'minlength': 1,
+            'maxlength': 10,
+            'create': True,
+            'read': True,
+            'update': True
+        },
+        'date': {
+            'type': 'datetime',
+            'input': 'date',
+            'minlength': 1,
+            'maxlength': 10,
+            'create': True,
+            'read': True,
+            'update': True
+        },
+        'datetime': {
+            'type': 'datetime',
+            'input': 'datetime',
+            'minlength': 1,
+            'maxlength': 10,
+            'create': True,
+            'read': True,
+            'update': True
+        },
+        'profile': {
+            'type': 'string',
+            'input': 'url',
+            'icon': '',
+            'minlength': 1,
+            'maxlength': 10,
+            'create': True,
+            'read': True,
+            'update': True
+        },
+        'tags': {
+            'type':'list',
+            'input':'list',
+            'icon':'',
+            'create':True,
+            'read':True,
+            'update':True
+        },
         'colors': {
             'type': 'list',
             'input': 'selectmulti',
+            'icon': '',
             'schema': {
                 'type': 'dict',
                 'schema': {
@@ -223,6 +287,8 @@ colors = {
     'schema': {
         'name': {
             'type': 'string',
+            'input': 'text',
+            'icon': '',
             'minlength': 1,
             'maxlength': 10,
             'unique': True,
@@ -244,6 +310,8 @@ dogBreeds = {
     'schema': {
         'name': {
             'type': 'string',
+            'input': 'text',
+            'icon': '',
             'minlength': 1,
             'maxlength': 10,
             'unique': True,
@@ -254,10 +322,19 @@ dogBreeds = {
     }
 }
 
+ceva = {
+    'schema':{
+        'name':{
+            'type':'list'
+        }
+    }
+}
+
 DOMAIN = {
     'cats': cats,
     'catBreeds': catBreeds,
     'dogs': dogs,
     'dogBreeds': dogBreeds,
-    'colors': colors
+    'colors': colors,
+    'ceva':ceva
 }

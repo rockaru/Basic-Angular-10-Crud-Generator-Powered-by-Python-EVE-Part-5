@@ -14,6 +14,9 @@ export class UpdateComponent implements OnInit {
   info:string
   resource:string
   form:any=[]
+  options: any = []
+  selected: any = {}
+
   item:any=[]
   id:string
   myFormGroup: FormGroup = new FormGroup({})
@@ -28,6 +31,17 @@ export class UpdateComponent implements OnInit {
     this.resource = data.resource
     this.item = data.item
     this.form =data.form
+    console.log(this.item)
+    this.loadOptions()
+    for (let key of this.form) {
+
+      if (key.value.input == 'selectmulti') {
+        this.selected[key.name] = this.item[key.name]
+      }
+      if (key.value.input == 'list') {
+        this.selected[key.name] = this.item[key.name]
+      }
+    }
     this.myFormGroup = this.formService.loadFormGroup(this.form,this.item)
     socketService.joinSocket(this.item._id)
     
@@ -40,6 +54,24 @@ export class UpdateComponent implements OnInit {
       this.info =`${this.item.name} este modificat in acest moment.`
       this.loadData()
     })
+  }
+
+  async loadOptions() {
+    for (let key of this.form) {
+      if (key.value.input == 'selectmulti') {
+        await this.dataService.getAll(key.value.schema.schema["name"].data_relation.resource).subscribe(data => {
+          this.options[key.name] = data["_items"]
+        })
+      }
+      if (key.value.input == 'select') {
+        console.log(key.value)
+
+        await this.dataService.getAll(key.value.data_relation.resource).subscribe(data => {
+          this.options[key.name] = data["_items"]
+          
+        })
+      }
+    }
   }
 
   loadData(){
