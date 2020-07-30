@@ -63,7 +63,7 @@ console.log(this.selected[key.name])
           const c= data["_items"]
           console.log(c.filter(x=> !this.selected[key.name].includes(x)))
            this.options[key.name] = c.filter(x=> {
-             return this.selected[key.name].filter(f=> { if(f._id == x._id){return false}})
+             return this.selected[key.name].filter(f=> { if(f._id == x._id){return true}})
            })
         })
       }
