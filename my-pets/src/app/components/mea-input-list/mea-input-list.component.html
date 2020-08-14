@@ -1,0 +1,16 @@
+<mat-form-field  [formGroup]="myFormGroup" appearance="standard">
+    <mat-label>{{key.name}}</mat-label>
+
+    <mat-chip-list #chipList formControlName="{{key.name}}">
+        <mat-chip *ngFor="let item of selected" [selectable]="selectable"
+            [removable]="removable" (removed)="remove(key,item)">
+            {{item}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="New {{key.name}}..." [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="add(key,$event)">
+    </mat-chip-list>
+    <mat-icon matSuffix>filter_vintage</mat-icon>
+
+</mat-form-field>

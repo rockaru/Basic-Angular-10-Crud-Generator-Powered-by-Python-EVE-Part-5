@@ -1,0 +1,4 @@
+   <label id="label-{{key.name}}">{{key.name}}</label>
+    <material-dual-listbox [(source)]="options" [filter]="true"
+        [(destination)]="selected" (destinationChange)="test($event)">
+    </material-dual-listbox>

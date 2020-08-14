@@ -1,157 +1,32 @@
 <h2 mat-dialog-title>Add {{resource}}</h2>
 
 <mat-dialog-content>
-    <form [formGroup]="myFormGroup">
 
-        <div *ngFor="let key of form">
-            <ng-container [ngSwitch]="key.value.input">
-            <mat-form-field *ngSwitchCase="'text'" appearance="standard">
-                <mat-label>{{key.name}}</mat-label>
-                <input matInput formControlName="{{key.name}}">
-                <mat-icon matSuffix>text_format</mat-icon>
-                <mat-placeholder>{{key.name}}</mat-placeholder>
-            </mat-form-field>
-            <mat-form-field *ngSwitchCase="'textarea'" appearance="standard">
-                <mat-label>{{key.name}}</mat-label>
-                <textarea matInput formControlName="{{key.name}}"></textarea>
-                <mat-icon matSuffix>text_fields</mat-icon>
-
-                <mat-placeholder>{{key.name}}</mat-placeholder>
-            </mat-form-field>
-            <mat-form-field *ngSwitchCase="'number'" appearance="standard">
-                <mat-label>{{key.name}}</mat-label>
-                <input matInput type="number" formControlName="{{key.name}}">
-                <mat-icon matSuffix>exposure_zero</mat-icon>
-
-                <mat-placeholder>{{key.name}}</mat-placeholder>
-            </mat-form-field>
-            <mat-form-field *ngSwitchCase="'email'" appearance="standard">
-                <mat-label>{{key.name}}</mat-label>
-                <input matInput type="email" formControlName="{{key.name}}">
-                <mat-icon matSuffix>email</mat-icon>
-
-                <mat-placeholder>{{key.name}}</mat-placeholder>
-            </mat-form-field>
-            <mat-form-field *ngSwitchCase="'date'" appearance="standard">
-                <mat-label>{{key.name}}</mat-label>
-                <input matInput type="date" formControlName="{{key.name}}">
-                <mat-icon matSuffix></mat-icon>
-
-                <mat-placeholder>{{key.name}}</mat-placeholder>
-            </mat-form-field>
-            
-            <mat-form-field *ngSwitchCase="'datetime'" appearance="standard">
-                <mat-label>{{key.name}}</mat-label>
-                <input matInput type="datetime-local" formControlName="{{key.name}}">
-                <mat-icon matSuffix></mat-icon>
-
-                <mat-placeholder>{{key.name}}</mat-placeholder>
-            </mat-form-field>
-            <mat-form-field *ngSwitchCase="'tel'" appearance="standard">
-                <mat-label>{{key.name}}</mat-label>
-                <input matInput type="tel" formControlName="{{key.name}}">
-                <mat-icon matSuffix>phone</mat-icon>
-
-                <mat-placeholder>{{key.name}}</mat-placeholder>
-            </mat-form-field>
-            <mat-form-field *ngSwitchCase="'password'" appearance="standard">
-                <mat-label>{{key.name}}</mat-label>
-                <input matInput [type]="hide ? 'password' : 'text'" formControlName="{{key.name}}">
-    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-    </button>
-
-                <mat-placeholder>{{key.name}}</mat-placeholder>
-            </mat-form-field>
-            <mat-form-field *ngSwitchCase="'url'" appearance="standard">
-                <mat-label>{{key.name}}</mat-label>
-                <input matInput type="url" formControlName="{{key.name}}">
-                <mat-icon matSuffix>link</mat-icon>
-
-                <mat-placeholder>{{key.name}}</mat-placeholder>
-            </mat-form-field>
-
-            <mat-form-field *ngSwitchCase="'list'" appearance="standard">
-                <mat-label>{{key.name}}</mat-label>
-                
-                <mat-chip-list #chipList aria-label="{{key.name}} selection" formControlName="{{key.name}}">
-                  <mat-chip *ngFor="let item of selected[key.name]" [selectable]="selectable"
-                           [removable]="removable" (removed)="remove(key,item)">
-                    {{item}}
-                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                  </mat-chip>
-                  <input placeholder="New {{key.name}}..."
-                         [matChipInputFor]="chipList"
-                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                         [matChipInputAddOnBlur]="addOnBlur"
-                         (matChipInputTokenEnd)="add(key,$event)">
-                </mat-chip-list>
-                <mat-icon matSuffix>filter_vintage</mat-icon>
-
-              </mat-form-field>
-            
-            <ng-container *ngSwitchCase="'checkbox'" appearance="standard">
-                
-                
-                <mat-icon matSuffix>filter_vintage</mat-icon> <mat-checkbox  formControlName="{{key.name}}">{{key.name}}</mat-checkbox>
-                
-            </ng-container>
-            <mat-form-field *ngSwitchCase="'select'" appearance="standard">
-                <mat-label>{{key.name}}</mat-label>
-                <mat-select formControlName="{{key.name}}">
-                    <mat-option *ngFor="let item of options[key.name]" [value]="item._id||item">{{item.name||item}}</mat-option>
-                </mat-select>
-                <mat-icon matSuffix>note_add</mat-icon>
-
-                <mat-placeholder>{{key.name}}</mat-placeholder>
-            </mat-form-field>
-            <mat-form-field class="columns" *ngSwitchCase="'image'" appearance="standard">
-                <mat-label *ngIf="selectedImages; else newImage">{{selectedImages.item(0).name}}</mat-label>
-                <ng-template #newImage >
-                    <mat-label>{{key.name}} </mat-label>
-                </ng-template>
-                <input matInput disabled (click)="imageInput.click()">
-                <button mat-icon-button matSuffix (click)="imageInput.click()">
-                    <mat-icon>image</mat-icon>
-                </button>
-                <input hidden #imageInput mat-button type="file" (change)="uploadImage($event,key.name)" accept="image/*">
-            </mat-form-field>
-            
-            <mat-form-field class="columns" *ngSwitchCase="'file'" #imageInput appearance="standard">
-                
-                <mat-label *ngIf="selectedFiles; else newFile">{{selectedFiles.item(0).name}}</mat-label>
-                <ng-template #newFile >
-                    <mat-label>{{key.name}} </mat-label>
-                </ng-template>
-                <input matInput disabled (click)="fileInput.click()">
-                <button mat-icon-button matSuffix (click)="fileInput.click()">
-                    <mat-icon>attach_file</mat-icon>
-                </button>
-                <input hidden (change)="uploadFile($event,key.name)" #fileInput type="file">
-            </mat-form-field>
-            <ng-container *ngSwitchCase="'selectradio'" appearance="standard">
-                <label id="label-{{key.name}}">{{key.name}}</label>
-                <mat-radio-group class="radio-group" aria-labelledby="label-{{key.name}}" formControlName="{{key.name}}">
-                    
-                        <mat-radio-button class="radio-button" *ngFor="let i of key.value.allowed" value="{{i}}">{{i}}</mat-radio-button>
-                    
-                </mat-radio-group>
-                
-            </ng-container>
-            
-            <ng-container *ngSwitchCase="'selectmulti'" appearance="standard">
-                <label id="label-{{key.name}}">{{key.name}}</label>
-        <material-dual-listbox [(source)]="options[key.name]" [filter]="true" [(destination)]="selected[key.name]" (destinationChange)="test($event)"></material-dual-listbox>
-                
-            </ng-container>   
-            
-        </ng-container>
+    <mea-form [form]="form" [(selected)]="selected" [(options)]="options">
         
-        </div>
-    </form>
+        <mea-input-text ></mea-input-text>
+        <mea-input-number></mea-input-number>
+        <mea-input-textarea></mea-input-textarea>
+        <mea-input-email></mea-input-email>
+        <mea-input-date></mea-input-date>
+        <mea-input-datetime></mea-input-datetime>
+        <mea-input-tel></mea-input-tel>
+        <mea-input-password></mea-input-password>
+        <mea-input-url></mea-input-url>
+        <mea-input-image></mea-input-image>
+        <mea-input-file></mea-input-file>
+        <mea-input-checkbox></mea-input-checkbox>
+        <mea-input-select></mea-input-select>
+        <mea-input-radio></mea-input-radio>
+        <mea-input-list></mea-input-list>
+        <mea-input-multi></mea-input-multi>
+
+    </mea-form>
+
 </mat-dialog-content>
 
 <mat-dialog-actions>
+
     <button mat-raised-button color="accent" (click)="save()">Save</button>
     <button mat-button type="button" color="primary" matDialogClose>Close</button>
 

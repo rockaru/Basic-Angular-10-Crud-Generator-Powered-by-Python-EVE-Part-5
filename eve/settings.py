@@ -262,9 +262,72 @@ dogs = {
                     'field': '_id',
                     'embeddable': True
                 }
-
-
-
+            },
+            'create': True,
+            'read': True,
+            'update': True
+        },
+        'owner': {
+            'type': 'list',
+            'input': 'multitext',
+            'icon': '',
+            'schema': {
+                'type': 'dict',
+                'schema': {
+                    'first name': {
+                        'type': 'string',
+                        'input': 'text',
+                        'icon': '',
+                        'create': True,
+                        'read': True,
+                        'update': True
+                    },
+                    'last name': {
+                        'type': 'string',
+                        'input': 'text',
+                        'icon': '',
+                        'create': True,
+                        'read': True,
+                        'update': True
+                    },
+                    'phone': {
+                        'type': 'number',
+                        'input': 'number',
+                        'icon': '',
+                        'create': True,
+                        'read': True,
+                        'update': True
+                    },
+                    'hair': {
+                        'type': 'objectid',
+                        'input': 'select',
+                        'icon': '',
+                        'data_relation': {
+                            'resource': 'colors',
+                            'field': '_id',
+                            'embeddable': True
+                        },
+                        'create': True,
+                        'read': True,
+                        'update': True
+                    },
+                    'colors': {
+                        'type': 'list',
+                        'input': 'selectmulti',
+                        'icon': '',
+                        'schema': {
+                            'type': 'objectid',
+                            'data_relation': {
+                                'resource': 'colors',
+                                'field': '_id',
+                                'embeddable': True
+                            }
+                        },
+                        'create': True,
+                        'read': True,
+                        'update': True
+                    },
+                }
             },
             'create': True,
             'read': True,

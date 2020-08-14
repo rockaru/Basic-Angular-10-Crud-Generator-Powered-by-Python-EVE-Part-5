@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FormService } from '../form.service'
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 import { DataService } from '../data.service'
 import { MatChipInputEvent } from '@angular/material/chips';
 import { keyframes } from '@angular/animations';
@@ -22,10 +22,9 @@ export class CreateComponent implements OnInit {
   list: any = []
   items: any = []
   myFormGroup: FormGroup = new FormGroup({})
-  selectedFiles: any
-  selectedImages: any
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  removable = true;
+  
+  
+  childForm:FormArray
   constructor(
     private dataService: DataService,
     private formService: FormService,
@@ -44,9 +43,23 @@ export class CreateComponent implements OnInit {
       if (key.value.input == 'list') {
         this.selected[key.name] = []
       }
+      if(key.value.input=='multitext'){
+        let i =0
+        for(let item of key.value.options){
+          if (item.value.input == 'selectmulti') {
+            this.selected[key.name+'-'+item.name+'-0'] = []
+
+          }
+          if(item.value.input == 'select'){
+            this.selected[key.name+'-'+item.name+'-0'] = []
+
+
+          }
+          i++
+        }
+      }
     }
     this.resource = data.resource
-    this.myFormGroup = this.formService.loadFormGroup(this.form)
 
   }
 
@@ -69,54 +82,60 @@ export class CreateComponent implements OnInit {
           
         })
       }
+
+      if(key.value.input=='multitext'){
+        let i = 0
+        for(let item of key.value.options){
+          if (item.value.input == 'selectmulti') {
+            await this.dataService.getAll(item.value.schema.data_relation.resource).subscribe(data => {
+              this.options[key.name+'-'+item.name+'-0'] = data["_items"]
+            })
+          }
+          if(item.value.input == 'select'){
+            await this.dataService.getAll(item.value.data_relation.resource).subscribe(data => {
+              this.options[key.name+'-'+item.name+'-0'] = data["_items"]
+            })
+          }
+          i++
+        }
+      }
+
     }
   }
 
-  test(event){
-    console.log(event)
-  }
+ 
 
-  add(form, event: MatChipInputEvent) {
-    const input = event.input;
-    const element = event.value;
-    // Add our fruit
-    if ((element || '').trim()) {
-      this.selected[form.name].push(element)
-      this.myFormGroup.get(form.name).patchValue(this.selected[form.name])
-      this.myFormGroup.get(form.name).updateValueAndValidity()
+ 
+
+  async addChildForm(key){
+    
+    
+    this.childForm = this.myFormGroup.get(key.name) as FormArray;
+    let i = this.childForm.length
+    console.log(i)
+    console.log(key.value.options)
+    this.childForm.push(this.formService.addChildForm(key.value.options));
+    for(let item of key.value.options){
+      if (item.value.input == 'selectmulti') {
+        await this.dataService.getAll(item.value.schema.data_relation.resource).subscribe(data => {
+          this.options[key.name+'-'+item.name+'-'+i] = data["_items"]
+        this.selected[key.name+'-'+item.name+'-'+i] = []
+
+        })
+
+      }
+      if(item.value.input == 'select'){
+        await this.dataService.getAll(item.value.data_relation.resource).subscribe(data => {
+          this.options[key.name+'-'+item.name+'-'+i] = data["_items"]
+        this.selected[key.name+'-'+item.name+'-'+i] = []
+
+        })
+
+
+      }
     }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-
-
   }
-
-  remove(form, value) {
-    const index = this.form.indexOf(value);
-    this.options[form.name].splice(index, 1)
-    this.myFormGroup.get(form.name).patchValue(this.options[form.name])
-    this.myFormGroup.get(form.name).updateValueAndValidity()
-  }
-
-  selectFile(event) {
-    this.selectedFiles = event.target.files;
-  }
-  uploadImage(event, form) {
-    const file = (event.target as HTMLInputElement).files[0];
-    this.myFormGroup.get(form).patchValue(file)
-    this.myFormGroup.get(form).updateValueAndValidity()
-    this.selectedImages = event.target.files;
-  }
-
-  uploadFile(event, form) {
-    const file = (event.target as HTMLInputElement).files[0];
-    this.myFormGroup.get(form).patchValue(file)
-    this.myFormGroup.get(form).updateValueAndValidity()
-    this.selectedFiles = event.target.files;
-  }
+ 
 
   save() {
     const formData = new FormData()

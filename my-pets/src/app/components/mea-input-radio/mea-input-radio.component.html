@@ -1,0 +1,11 @@
+<ng-container  [formGroup]="myFormGroup" appearance="standard">
+    <label id="label-{{key.name}}">{{key.name}}</label>
+    <mat-radio-group class="radio-group" formControlName="{{key.name}}">
+
+        <mat-radio-button class="radio-button" *ngFor="let i of options" value="{{i}}">
+            {{i}}
+        </mat-radio-button>
+
+    </mat-radio-group>
+
+</ng-container>

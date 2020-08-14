@@ -1,0 +1,51 @@
+<ng-container  [formGroup]="myFormGroup" appearance="standard">
+    <label id="label-{{key.name}}">{{key.name}}</label>
+    <ng-container formArrayName="{{key.name}}"
+        *ngFor="let childForm of myFormGroup.get(key.name)['controls'];let i=index">
+
+        <br>
+        <ng-container formGroupName="{{i}}">
+            <ng-container *ngFor="let child of key.value.options">
+                <ng-container [ngSwitch]="child.value.input">
+
+                    <mea-input-text *ngSwitchCase="'text'" [form-group]="myFormGroup" [key]="child">
+                    </mea-input-text>
+
+                    <mea-input-number *ngSwitchCase="'number'" [form-group]="myFormGroup" [key]="child"></mea-input-number>
+                    <mea-input-textarea *ngSwitchCase="'textarea'" [form-group]="myFormGroup"
+                        [key]="child"></mea-input-textarea>
+                    <mea-input-email *ngSwitchCase="'email'" [form-group]="myFormGroup" [key]="child">
+                    </mea-input-email>
+                    <mea-input-date *ngSwitchCase="'date'" [form-group]="myFormGroup" [key]="child">
+                    </mea-input-date>
+                    <mea-input-datetime *ngSwitchCase="'datetime'" [form-group]="myFormGroup"
+                        [key]="child"></mea-input-datetime>
+                    <mea-input-tel *ngSwitchCase="'tel'" [form-group]="myFormGroup" [key]="child">
+                    </mea-input-tel>
+                    <mea-input-password *ngSwitchCase="'password'" [form-group]="myFormGroup"
+                        [key]="child"></mea-input-password>
+                    <mea-input-url *ngSwitchCase="'url'" [form-group]="myFormGroup" [key]="child">
+                    </mea-input-url>
+                    <mea-input-checkbox *ngSwitchCase="'checkbox'" [form-group]="myFormGroup"
+                        [key]="child"></mea-input-checkbox>
+                    <mea-input-select *ngSwitchCase="'select'" [form-group]="myFormGroup" [key]="child"
+                        [options]="options[key.name+'-'+child.name+'-'+i]"></mea-input-select>
+                    <mea-input-radio *ngSwitchCase="'selectradio'" [form-group]="myFormGroup"
+                        [key]="child"></mea-input-radio>
+                    <mea-input-list *ngSwitchCase="'list'" [form-group]="myFormGroup" [key]="child"
+                        [selected]="selected[key.name+'-'+child.name+'-'+i]"></mea-input-list>
+                    <mea-input-dual-list *ngSwitchCase="'selectmulti'" [form-group]="myFormGroup"
+                        [key]="child" [(selected)]="selected[key.name+'-'+child.name+'-'+i]"
+                        [(options)]="options[key.name+'-'+child.name+'-'+i]"></mea-input-dual-list>
+
+
+
+                </ng-container>
+            </ng-container>
+        </ng-container>
+
+    </ng-container>
+    <br><button mat-icon-button matSuffix (click)="addChildForm(key)">
+        Add {{key.name}}<mat-icon>add</mat-icon>
+    </button>
+</ng-container>

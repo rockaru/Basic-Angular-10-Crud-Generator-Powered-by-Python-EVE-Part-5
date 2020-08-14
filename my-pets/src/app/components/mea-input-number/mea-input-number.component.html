@@ -1,0 +1,6 @@
+<mat-form-field  [formGroup]="myFormGroup" appearance="standard">
+    <mat-label>{{key.name}}</mat-label>
+    <input matInput type="number" formControlName="{{key.name}}">
+    <mat-icon matSuffix>exposure_zero</mat-icon>
+    <mat-placeholder>{{key.name}}</mat-placeholder>
+</mat-form-field>

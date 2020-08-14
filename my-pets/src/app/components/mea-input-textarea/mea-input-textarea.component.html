@@ -1,0 +1,7 @@
+<mat-form-field  [formGroup]="myFormGroup" appearance="standard">
+    <mat-label>{{key.name}}</mat-label>
+    <textarea matInput formControlName="{{key.name}}"></textarea>
+    <mat-icon matSuffix>text_fields</mat-icon>
+
+    <mat-placeholder>{{key.name}}</mat-placeholder>
+</mat-form-field>

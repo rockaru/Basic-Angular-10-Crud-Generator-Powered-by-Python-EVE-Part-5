@@ -1,0 +1,12 @@
+<mat-form-field class="columns" [formGroup]="myFormGroup" appearance="standard">
+    <mat-label *ngIf="selectedImages; else newImage">{{selectedImages.item(0).name}}</mat-label>
+    <ng-template #newImage>
+        <mat-label>{{key.name}} </mat-label>
+    </ng-template>
+    <input matInput disabled (click)="imageInput.click()">
+    <button mat-icon-button matSuffix (click)="imageInput.click()">
+        <mat-icon>image</mat-icon>
+    </button>
+    <input hidden #imageInput mat-button type="file" (change)="uploadImage($event,key.name)"
+        accept="image/*">
+</mat-form-field>

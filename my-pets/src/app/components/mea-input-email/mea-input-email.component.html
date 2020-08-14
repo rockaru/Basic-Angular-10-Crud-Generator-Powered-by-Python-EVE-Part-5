@@ -1,0 +1,7 @@
+<mat-form-field  [formGroup]="myFormGroup" appearance="standard">
+    <mat-label>{{key.name}}</mat-label>
+    <input matInput type="email" formControlName="{{key.name}}">
+    <mat-icon matSuffix>email</mat-icon>
+
+    <mat-placeholder>{{key.name}}</mat-placeholder>
+</mat-form-field>

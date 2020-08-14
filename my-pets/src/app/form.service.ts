@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { DataService } from './data.service'
 import { SocketService } from './socket.service'
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,8 @@ export class FormService {
     private dialog: MatDialog,
     private httpClient: HttpClient,
     private dataService: DataService,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private formBuilder: FormBuilder
   ) { }
 
   loadFormGroup(form, item?) {
@@ -22,21 +23,47 @@ export class FormService {
 
     if (item) {
       for (let element of form) {
-        group[element.name] = new FormControl(item[element.name])
+        if (element.value.input == 'select') {
+          group[element.name] = new FormControl(item[element.name]._id)
+        } else {
+          group[element.name] = new FormControl(item[element.name])
+        }
       }
     } else {
 
       for (let element of form) {
-        if(element.value.input=="list"){
-        group[element.name] = new FormControl('[]')
-        }else{
+        if (element.value.input == "list") {
+          group[element.name] = new FormControl('[]')
+
+        }
+        if (element.value.input == "multitext") {
+          group[element.name] = this.formBuilder.array([this.createChildForm(element.value.schema.schema)])
+        } else {
           group[element.name] = new FormControl('')
 
         }
       }
     }
-    const formGroup = new FormGroup(group)
-    return formGroup
+    return this.formBuilder.group(group)
+
+  }
+
+  createChildForm(element): FormGroup {
+    const group = {}
+    for (let item in element) {
+      group[item] = new FormControl('')
+      console.log(element[item])
+    }
+    return this.formBuilder.group(group)
+  }
+
+  addChildForm(element): FormGroup {
+    const group = {}
+    for (let item of element) {
+      group[item.name] = new FormControl('')
+      console.log(item)
+    }
+    return this.formBuilder.group(group)
   }
 
   getForm(resource) {
@@ -56,9 +83,12 @@ export class FormService {
               //data[item].options = this.loadOptions(resource, item, data[item].data_relation.resource)
 
             }
-            if(data[item].input=="selectmulti"){
+            if (data[item].input == "selectmulti") {
               //console.log(data[item])
-              data[item].options = this.loadOptions(resource,item,data[item].schema.data_relation.resource)
+              data[item].options = this.loadOptions(resource, item, data[item].schema.data_relation.resource)
+            }
+            if (data[item].input == 'multitext') {
+              data[item].options = this.loadChildFormItems(data[item].schema.schema, scope)
             }
           }
           break;
@@ -87,6 +117,24 @@ export class FormService {
     }
     localStorage.setItem(`form-${resource}-${scope}`, JSON.stringify(form))
     return form;
+  }
+
+  loadChildFormItems(items, scope) {
+    const form = []
+
+    for (let item in items) {
+      switch (scope) {
+        case 'create':
+          if (items[item].create) {
+            form.push({
+              name: item,
+              value: items[item]
+            })
+          }
+          break
+      }
+    }
+    return form
   }
 
   loadOptions(resource, field, data) {
@@ -200,7 +248,7 @@ export class FormService {
       data => {
         if (data) {
           console.log(data)
-          
+
         }
       }
     )
