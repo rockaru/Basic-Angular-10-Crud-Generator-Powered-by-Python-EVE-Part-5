@@ -1,4 +1,8 @@
-   <label id="label-{{key.name}}">{{key.name}}</label>
-    <material-dual-listbox [(source)]="options" [filter]="true"
-        [(destination)]="selected" (destinationChange)="test($event)">
+<br/><label id="label-{{key.name}}">{{key.name}}</label>
+<button mat-icon-button matSuffix (click)="create(key.value.schema.data_relation.resource)" >
+    <mat-icon>note_add</mat-icon>
+</button>
+<material-dual-listbox [(source)]="key.value.options[index]" [filter]="true"
+        [(destination)]="key.value.selected[index]"
+        (destinationChange)="test($event)">
     </material-dual-listbox>

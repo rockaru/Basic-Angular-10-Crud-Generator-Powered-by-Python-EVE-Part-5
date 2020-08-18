@@ -3,7 +3,7 @@
     <div *ngFor="let key of form">
         <div [ngSwitch]="key.value.input">
             <div *ngSwitchCase="'text'">
-                <ng-content select="mea-input-text" [form-group]="myFormGroup" [key]="key"></ng-content>
+                <ng-content select="mea-input-text" [(form-group)]="myFormGroup" [key]="key"></ng-content>
             </div>
             <div *ngSwitchCase="'number'">
                 <ng-content select="mea-input-number" [form-group]="myFormGroup" [key]="key"></ng-content>
@@ -39,13 +39,13 @@
                 <ng-content select="mea-input-checkbox" [form-group]="myFormGroup" [key]="key"></ng-content>
             </div>
             <div *ngSwitchCase="'select'" >
-                <ng-content select="mea-input-select"  [options]="options[key.name]" [form-group]="myFormGroup" [key]="key"></ng-content>
+                <ng-content select="mea-input-select"  [(options)]="options[key.name]" [form-group]="myFormGroup" [key]="key"></ng-content>
             </div>
             <div *ngSwitchCase="'selectradio'" >
-                <ng-content select="mea-input-radio"  [options]="key.value.allowed" [form-group]="myFormGroup" [key]="key"></ng-content>
+                <ng-content select="mea-input-radio"  [(options)]="key.value.allowed" [form-group]="myFormGroup" [key]="key"></ng-content>
             </div>
             <div *ngSwitchCase="'list'" >
-                <ng-content select="mea-input-list" [selected]="selected[key.name]" [form-group]="myFormGroup" [key]="key"></ng-content>
+                <ng-content select="mea-input-list" [(selected)]="selected[key.name]" [form-group]="myFormGroup" [key]="key"></ng-content>
             </div>
             <div *ngSwitchCase="'multitext'" >
                 <ng-content select="mea-input-multi"  [(selected)]="selected" [(options)]="options" [form-group]="myFormGroup" [key]="key"></ng-content>

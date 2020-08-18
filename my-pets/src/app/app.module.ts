@@ -17,6 +17,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatIconModule} from '@angular/material/icon';
 import {MaterialDualListboxModule} from 'mea-material-dual-listbox'
 import {MatChipsModule} from '@angular/material/chips';
+import {MatCardModule} from '@angular/material/card';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -42,6 +43,7 @@ import { MeaInputImageComponent } from './components/mea-input-image/mea-input-i
 import { MeaInputFileComponent } from './components/mea-input-file/mea-input-file.component';
 import { MeaInputListComponent } from './components/mea-input-list/mea-input-list.component';
 import { MeaInputDualListComponent } from './components/mea-input-dual-list/mea-input-dual-list.component';
+import { MeaInputDictComponent } from './components/mea-input-dict/mea-input-dict.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +70,8 @@ import { MeaInputDualListComponent } from './components/mea-input-dual-list/mea-
     MeaInputImageComponent,
     MeaInputFileComponent,
     MeaInputListComponent,
-    MeaInputDualListComponent
+    MeaInputDualListComponent,
+    MeaInputDictComponent
   ],
   imports: [
     BrowserModule,
@@ -85,6 +88,7 @@ import { MeaInputDualListComponent } from './components/mea-input-dual-list/mea-
     MatRadioModule,
     MatIconModule,
     MatChipsModule,
+    MatCardModule,
     MaterialDualListboxModule,
     FormsModule
   ],

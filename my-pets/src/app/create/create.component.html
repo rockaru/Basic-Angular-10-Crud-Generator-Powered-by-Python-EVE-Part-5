@@ -2,26 +2,33 @@
 
 <mat-dialog-content>
 
-    <mea-form [form]="form" [(selected)]="selected" [(options)]="options">
-        
-        <mea-input-text ></mea-input-text>
-        <mea-input-number></mea-input-number>
-        <mea-input-textarea></mea-input-textarea>
-        <mea-input-email></mea-input-email>
-        <mea-input-date></mea-input-date>
-        <mea-input-datetime></mea-input-datetime>
-        <mea-input-tel></mea-input-tel>
-        <mea-input-password></mea-input-password>
-        <mea-input-url></mea-input-url>
-        <mea-input-image></mea-input-image>
-        <mea-input-file></mea-input-file>
-        <mea-input-checkbox></mea-input-checkbox>
-        <mea-input-select></mea-input-select>
-        <mea-input-radio></mea-input-radio>
-        <mea-input-list></mea-input-list>
-        <mea-input-multi></mea-input-multi>
+    <form [formGroup]="myFormGroup">
 
-    </mea-form>
+        <div *ngFor="let key of form">
+            <div [ngSwitch]="key.value.input">
+                <mea-input-text *ngSwitchCase="'text'" [form-group]="myFormGroup" [key]="key"></mea-input-text>
+                <mea-input-number *ngSwitchCase="'number'" [form-group]="myFormGroup" [key]="key"></mea-input-number>
+                <mea-input-textarea *ngSwitchCase="'textarea'" [form-group]="myFormGroup" [key]="key"></mea-input-textarea>
+                <mea-input-email *ngSwitchCase="'email'" [form-group]="myFormGroup" [key]="key"></mea-input-email>
+                <mea-input-date *ngSwitchCase="'date'" [form-group]="myFormGroup" [key]="key"></mea-input-date>
+                <mea-input-datetime *ngSwitchCase="'datetime'" [form-group]="myFormGroup" [key]="key"></mea-input-datetime>
+                <mea-input-tel *ngSwitchCase="'tel'" [form-group]="myFormGroup" [key]="key"></mea-input-tel>
+                <mea-input-password *ngSwitchCase="'password'" [form-group]="myFormGroup" [key]="key"></mea-input-password>
+                <mea-input-url *ngSwitchCase="'url'" [form-group]="myFormGroup" [key]="key"></mea-input-url>
+                <mea-input-image *ngSwitchCase="'image'" [form-group]="myFormGroup" [key]="key"></mea-input-image>
+                <mea-input-file *ngSwitchCase="'file'" [form-group]="myFormGroup" [key]="key"></mea-input-file>
+                <mea-input-checkbox *ngSwitchCase="'checkbox'" [form-group]="myFormGroup" [key]="key"></mea-input-checkbox>
+                <mea-input-select *ngSwitchCase="'select'"  index='0' [form-group]="myFormGroup" [key]="key"></mea-input-select>
+                <mea-input-radio *ngSwitchCase="'selectradio'" [(options)]="key.value.allowed" [form-group]="myFormGroup" [key]="key"></mea-input-radio>
+                <mea-input-list *ngSwitchCase="'list'"  [form-group]="myFormGroup" [key]="key"></mea-input-list>
+                <mea-input-dual-list *ngSwitchCase="'selectmulti'" index='0' [form-group]="myFormGroup" [key]="key"></mea-input-dual-list>
+                <mea-input-multi *ngSwitchCase="'multi'"  index='0' [(form-group)]="myFormGroup" [key]="key"></mea-input-multi>
+                <mea-input-dict *ngSwitchCase="'dict'"  index='0' [(form-group)]="myFormGroup" [key]="key"></mea-input-dict>
+                
+
+            </div>
+        </div>
+    </form>
 
 </mat-dialog-content>
 

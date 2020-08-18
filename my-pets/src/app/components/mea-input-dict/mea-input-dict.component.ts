@@ -1,22 +1,17 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { ENTER, COMMA } from '@angular/cdk/keycodes';
 
 @Component({
-  selector: 'mea-input-list',
-  templateUrl: './mea-input-list.component.html',
-  styleUrls: ['./mea-input-list.component.scss']
+  selector: 'mea-input-dict',
+  templateUrl: './mea-input-dict.component.html',
+  styleUrls: ['./mea-input-dict.component.scss']
 })
-export class MeaInputListComponent implements OnInit {
-
+export class MeaInputDictComponent implements OnInit {
   @Input('form-group') myFormGroup: FormGroup
   @Input() key
   @Input() selected
-  removable = true;
-  addOnBlur = true
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-
+  @Input() options
   constructor() { }
 
   ngOnInit(): void {
@@ -46,4 +41,5 @@ export class MeaInputListComponent implements OnInit {
     this.myFormGroup.get(key.name).patchValue(this.key.value.selected)
     this.myFormGroup.get(key.name).updateValueAndValidity()
   }
+
 }

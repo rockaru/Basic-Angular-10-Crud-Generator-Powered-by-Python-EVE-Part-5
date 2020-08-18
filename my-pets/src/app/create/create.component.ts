@@ -33,105 +33,27 @@ export class CreateComponent implements OnInit {
   ) {
 
     this.form = data.form
-    this.loadOptions()
+     this.myFormGroup = this.formService.loadFormGroup(this.form)
     
-    for (let key of this.form) {
-
-      if (key.value.input == 'selectmulti') {
-        this.selected[key.name] = []
-      }
-      if (key.value.input == 'list') {
-        this.selected[key.name] = []
-      }
-      if(key.value.input=='multitext'){
-        let i =0
-        for(let item of key.value.options){
-          if (item.value.input == 'selectmulti') {
-            this.selected[key.name+'-'+item.name+'-0'] = []
-
-          }
-          if(item.value.input == 'select'){
-            this.selected[key.name+'-'+item.name+'-0'] = []
-
-
-          }
-          i++
-        }
-      }
-    }
+    this.init(this.form)
     this.resource = data.resource
 
   }
+
+  
+  
 
   ngOnInit() {
     
   }
 
-  async loadOptions() {
-    for (let key of this.form) {
-      if (key.value.input == 'selectmulti') {
-        await this.dataService.getAll(key.value.schema.data_relation.resource).subscribe(data => {
-          this.options[key.name] = data["_items"]
-        })
-      }
-      if (key.value.input == 'select') {
-        console.log(key.value)
-
-        await this.dataService.getAll(key.value.data_relation.resource).subscribe(data => {
-          this.options[key.name] = data["_items"]
-          
-        })
-      }
-
-      if(key.value.input=='multitext'){
-        let i = 0
-        for(let item of key.value.options){
-          if (item.value.input == 'selectmulti') {
-            await this.dataService.getAll(item.value.schema.data_relation.resource).subscribe(data => {
-              this.options[key.name+'-'+item.name+'-0'] = data["_items"]
-            })
-          }
-          if(item.value.input == 'select'){
-            await this.dataService.getAll(item.value.data_relation.resource).subscribe(data => {
-              this.options[key.name+'-'+item.name+'-0'] = data["_items"]
-            })
-          }
-          i++
-        }
-      }
-
-    }
-  }
-
- 
-
- 
-
-  async addChildForm(key){
-    
-    
-    this.childForm = this.myFormGroup.get(key.name) as FormArray;
-    let i = this.childForm.length
-    console.log(i)
-    console.log(key.value.options)
-    this.childForm.push(this.formService.addChildForm(key.value.options));
-    for(let item of key.value.options){
-      if (item.value.input == 'selectmulti') {
-        await this.dataService.getAll(item.value.schema.data_relation.resource).subscribe(data => {
-          this.options[key.name+'-'+item.name+'-'+i] = data["_items"]
-        this.selected[key.name+'-'+item.name+'-'+i] = []
-
-        })
-
-      }
-      if(item.value.input == 'select'){
-        await this.dataService.getAll(item.value.data_relation.resource).subscribe(data => {
-          this.options[key.name+'-'+item.name+'-'+i] = data["_items"]
-        this.selected[key.name+'-'+item.name+'-'+i] = []
-
-        })
-
-
+  init(form){
+    for(let key of form){
+      if(key.value.input=="multi"){
+        this.init(key.value.child)
+      }else{
+        key.value.options=[]
+        key.value.selected=[]
       }
     }
   }

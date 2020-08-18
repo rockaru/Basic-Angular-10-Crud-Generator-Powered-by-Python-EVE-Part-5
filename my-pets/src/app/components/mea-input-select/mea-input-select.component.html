@@ -1,11 +1,13 @@
 <mat-form-field  [formGroup]="myFormGroup" appearance="standard">
     <mat-label>{{key.name}}</mat-label>
     <mat-select formControlName="{{key.name}}">
-        <mat-option *ngFor="let item of options" [value]="item._id||item">
+        <mat-option *ngFor="let item of key.value.options[index]" [value]="item._id||item">
             {{item.name||item}}
         </mat-option>
     </mat-select>
-    <mat-icon matSuffix>note_add</mat-icon>
-
+    
     <mat-placeholder>{{key.name}}</mat-placeholder>
 </mat-form-field>
+<button mat-icon-button matSuffix (click)="create(key.value.data_relation.resource)" >
+    <mat-icon>note_add</mat-icon>
+</button>

@@ -32,27 +32,37 @@ export class FormService {
     } else {
 
       for (let element of form) {
-        if (element.value.input == "list") {
-          group[element.name] = new FormControl('[]')
+        switch (element.value.input) {
+          case "list":
+            group[element.name] = new FormControl('[]')
+            break
 
-        }
-        if (element.value.input == "multitext") {
-          group[element.name] = this.formBuilder.array([this.createChildForm(element.value.schema.schema)])
-        } else {
-          group[element.name] = new FormControl('')
+          case "multi":
+            group[element.name] = this.formBuilder.array([this.loadFormGroup(element.value.child)])
+            break
 
+          case "dict":
+            group[element.name] = this.formBuilder.array([this.loadFormGroup(element.value.child)])
+            break
+            
+          default:
+            group[element.name] = new FormControl('')
+            break
         }
+
       }
     }
+    
     return this.formBuilder.group(group)
 
   }
 
   createChildForm(element): FormGroup {
     const group = {}
+    console.log(element)
     for (let item in element) {
       group[item] = new FormControl('')
-      console.log(element[item])
+      
     }
     return this.formBuilder.group(group)
   }
@@ -60,8 +70,11 @@ export class FormService {
   addChildForm(element): FormGroup {
     const group = {}
     for (let item of element) {
+      if(item.value.input=='multi'){
+        group[item.name] = this.formBuilder.array([this.loadFormGroup(item.value.child)])
+      }else{
       group[item.name] = new FormControl('')
-      console.log(item)
+      }
     }
     return this.formBuilder.group(group)
   }
@@ -79,16 +92,18 @@ export class FormService {
         case 'create':
           if (data[item].create) {
             items[item] = data[item];
+            
+      
             if (data[item].input == "select") {
               //data[item].options = this.loadOptions(resource, item, data[item].data_relation.resource)
 
             }
-            if (data[item].input == "selectmulti") {
-              //console.log(data[item])
-              data[item].options = this.loadOptions(resource, item, data[item].schema.data_relation.resource)
+            
+            if (data[item].input == 'multi') {
+              data[item].child = this.loadChildFormItems(resource, data[item].schema.schema, scope)
             }
-            if (data[item].input == 'multitext') {
-              data[item].options = this.loadChildFormItems(data[item].schema.schema, scope)
+            if (data[item].input == 'dict') {
+              data[item].child = this.loadChildFormItems(resource, data[item].schema, scope)
             }
           }
           break;
@@ -119,20 +134,30 @@ export class FormService {
     return form;
   }
 
-  loadChildFormItems(items, scope) {
+  loadChildFormItems(resource, items, scope) {
     const form = []
 
     for (let item in items) {
       switch (scope) {
         case 'create':
           if (items[item].create) {
-            form.push({
-              name: item,
-              value: items[item]
-            })
+           
+            if (items[item].input == 'multi') {
+              items[item].child = this.loadChildFormItems(resource, items[item].schema.schema, scope)
+            }
+            if (items[item].input == 'dict') {
+              items[item].child = this.loadChildFormItems(resource, items[item].schema, scope)
+            }
           }
           break
       }
+    }
+    for (let item in items) {
+      form.push({
+        name: item,
+        value: items[item]
+      })
+
     }
     return form
   }
@@ -227,10 +252,10 @@ export class FormService {
     if (!form) {
       this.getForm(resource).subscribe(form => {
         form = this.setStructure(resource, scope, form)
-        this.loadCreate(form, options, resource, scope, component)
+        return this.loadCreate(form, options, resource, scope, component)
       })
     } else {
-      this.loadCreate(form, options, resource, scope, component)
+      return this.loadCreate(form, options, resource, scope, component)
     }
 
   }
@@ -244,14 +269,7 @@ export class FormService {
       scope: scope
     }
     const dialogRef = this.dialog.open(component, dialogConfig)
-    dialogRef.afterClosed().subscribe(
-      data => {
-        if (data) {
-          console.log(data)
-
-        }
-      }
-    )
+    return dialogRef
   }
 
   openUpdate(resource, item, component) {
