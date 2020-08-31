@@ -269,7 +269,7 @@ dogs = {
         },
         'compus': {
             'type': 'dict',
-            'input':'dict',
+            'input': 'dict',
             'schema': {
                 'profile': {
                     'type': 'string',
@@ -294,6 +294,15 @@ dogs = {
             'read': True,
             'update': True
         },
+        'combo': {
+            'type': 'objectid',
+            'input': 'combo',
+            'icon': '',
+            'colections':['colors','dogBreeds','dogs'],
+            'create': True,
+            'read': True,
+            'update': True
+        },
         'owner': {
             'type': 'list',
             'input': 'multi',
@@ -312,6 +321,14 @@ dogs = {
                     'last name': {
                         'type': 'string',
                         'input': 'text',
+                        'icon': '',
+                        'create': True,
+                        'read': True,
+                        'update': True
+                    },
+                    'tags': {
+                        'type': 'list',
+                        'input': 'list',
                         'icon': '',
                         'create': True,
                         'read': True,
@@ -354,6 +371,7 @@ dogs = {
                         'read': True,
                         'update': True
                     },
+
                     'test': {
                         'type': 'list',
                         'input': 'multi',
@@ -369,82 +387,9 @@ dogs = {
                                     'read': True,
                                     'update': True
                                 },
-                                'last name': {
-                                    'type': 'string',
-                                    'input': 'text',
-                                    'icon': '',
-                                    'create': True,
-                                    'read': True,
-                                    'update': True
-                                },
-                                'phone': {
-                                    'type': 'number',
-                                    'input': 'number',
-                                    'icon': '',
-                                    'create': True,
-                                    'read': True,
-                                    'update': True
-                                },
-                                'hair': {
-                                    'type': 'objectid',
-                                    'input': 'select',
-                                    'icon': '',
-                                    'data_relation': {
-                                        'resource': 'colors',
-                                        'field': '_id',
-                                        'embeddable': True
-                                    },
-                                    'create': True,
-                                    'read': True,
-                                    'update': True
-                                },
-                                'colors': {
+                                'tags': {
                                     'type': 'list',
-                                    'input': 'selectmulti',
-                                    'icon': '',
-                                    'schema': {
-                                        'type': 'objectid',
-                                        'data_relation': {
-                                            'resource': 'colors',
-                                            'field': '_id',
-                                            'embeddable': True
-                                        }
-                                    },
-                                    'create': True,
-                                    'read': True,
-                                    'update': True
-                                },
-                                'test': {
-                                    'type': 'list',
-                                    'input': 'multitext',
-                                    'icon': '',
-                                    'schema': {
-                                        'type': 'dict',
-                                        'schema': {
-                                            'ceva': {
-                                                'type': 'string',
-                                                'input': 'text',
-                                                'icon': '',
-                                                'create': True,
-                                                'read': True,
-                                                'update': True
-                                            },
-                                        }
-                                    },
-                                    'create': True,
-                                    'read': True,
-                                    'update': True
-                                },
-                                'altceva': {
-                        'type': 'list',
-                        'input': 'multi',
-                        'icon': '',
-                        'schema': {
-                            'type': 'dict',
-                            'schema': {
-                                'first name': {
-                                    'type': 'string',
-                                    'input': 'text',
+                                    'input': 'list',
                                     'icon': '',
                                     'create': True,
                                     'read': True,
@@ -497,7 +442,7 @@ dogs = {
                                 },
                                 'test': {
                                     'type': 'list',
-                                    'input': 'multitext',
+                                    'input': 'multi',
                                     'icon': '',
                                     'schema': {
                                         'type': 'dict',
@@ -510,19 +455,116 @@ dogs = {
                                                 'read': True,
                                                 'update': True
                                             },
+                                        }
+                                    },
+                                    'create': True,
+                                    'read': True,
+                                    'update': True
+                                },
+                                'altceva cu pauza': {
+                                    'type': 'list',
+                                    'input': 'multi',
+                                    'icon': '',
+                                    'schema': {
+                                        'type': 'dict',
+                                        'schema': {
+                                            'first name': {
+                                                'type': 'string',
+                                                'input': 'text',
+                                                'icon': '',
+                                                'create': True,
+                                                'read': True,
+                                                'update': True
+                                            },
+                                            'last name': {
+                                                'type': 'string',
+                                                'input': 'text',
+                                                'icon': '',
+                                                'create': True,
+                                                'read': True,
+                                                'update': True
+                                            },
+                                            'phone': {
+                                                'type': 'number',
+                                                'input': 'number',
+                                                'icon': '',
+                                                'create': True,
+                                                'read': True,
+                                                'update': True
+                                            },
+                                            'hair': {
+                                                'type': 'objectid',
+                                                'input': 'select',
+                                                'icon': '',
+                                                'data_relation': {
+                                                    'resource': 'colors',
+                                                    'field': '_id',
+                                                    'embeddable': True
+                                                },
+                                                'create': True,
+                                                'read': True,
+                                                'update': True
+                                            },
+                                            'colors': {
+                                                'type': 'list',
+                                                'input': 'selectmulti',
+                                                'icon': '',
+                                                'schema': {
+                                                    'type': 'objectid',
+                                                    'data_relation': {
+                                                        'resource': 'colors',
+                                                        'field': '_id',
+                                                        'embeddable': True
+                                                    }
+                                                },
+                                                'create': True,
+                                                'read': True,
+                                                'update': True
+                                            },
+                                            'tags': {
+                                                'type': 'list',
+                                                'input': 'list',
+                                                'icon': '',
+                                                'create': True,
+                                                'read': True,
+                                                'update': True
+                                            },
+                                            'test': {
+                                                'type': 'list',
+                                                'input': 'multi',
+                                                'icon': '',
+                                                'schema': {
+                                                    'type': 'dict',
+                                                    'schema': {
+                                                        'ceva': {
+                                                            'type': 'string',
+                                                            'input': 'text',
+                                                            'icon': '',
+                                                            'create': True,
+                                                            'read': True,
+                                                            'update': True
+                                                        },
+                                                        'tags': {
+                                                            'type': 'list',
+                                                            'input': 'list',
+                                                            'icon': '',
+                                                            'create': True,
+                                                            'read': True,
+                                                            'update': True
+                                                        },
+                                                    }
+                                                },
+                                                'create': True,
+                                                'read': True,
+                                                'update': True
+                                            }
+
                                         }
                                     },
                                     'create': True,
                                     'read': True,
                                     'update': True
                                 }
-
-                            }
-                        },
-                        'create': True,
-                        'read': True,
-                        'update': True
-                    }
 
                             }
                         },
@@ -583,6 +625,17 @@ dogBreeds = {
             'read': True,
             'update': False
         },
+        'altceva':{
+            'type': 'string',
+            'input': 'text',
+            'icon': '',
+            'minlength': 1,
+            'maxlength': 10,
+            'unique': True,
+            'create': True,
+            'read': True,
+            'update': False
+        }
     }
 }
 
@@ -594,11 +647,141 @@ ceva = {
     }
 }
 
+settings = {
+    'item_title': 'setting',
+    'cache_control': 'max-age=0,must-revalidate',
+    'cache_expires': 1,
+    'schema': {
+        'document': {
+            'type': 'list',
+            'input': 'multi',
+            'create': True,
+            'read': True,
+            'update': True,
+
+            'schema': {
+                'type': 'dict',
+
+                'schema': {
+                    'document name': {
+
+                        'type': 'string',
+                        'input': 'text',
+                        'create': True,
+                        'read': True,
+                        'update': True
+
+                    },
+                    'item_title': {
+
+                        'type': 'string',
+                        'input': 'text',
+                        'create': True,
+                        'read': True,
+                        'update': True
+
+                    },
+                    'cache_control': {
+
+                        'type': 'string',
+                        'input': 'text',
+                        'create': True,
+                        'read': True,
+                        'update': True
+
+                    },
+                    'cache_expires': {
+
+                        'type': 'number',
+                        'input': 'number',
+                        'create': True,
+                        'read': True,
+                        'update': True
+
+                    },
+                    'schemaa': {
+                        'type': 'list',
+                        'input': 'multi',
+                        'create': True,
+                        'read': True,
+                        'update': True,
+
+                        'schema': {
+                            'type': 'dict',
+                            'schema': {
+                                'name': {
+                                    'type': 'string',
+                                    'input': 'text',
+                                    'create': True,
+                                    'read': True,
+                                    'update': True
+                                },
+                                'type': {
+                                    'type': 'string',
+                                    'input': 'select',
+                                    'allowed': ['string', 'number', 'list'],
+                                    'create': True,
+                                    'read': True,
+                                    'update': True
+                                },
+                                'input': {
+                                    'type': 'string',
+                                    'input': 'combo',
+                                    'colections': ['select'],
+                                    'create': True,
+                                    'read': True,
+                                    'update': True
+                                },
+                                'create': {
+                                    'type': 'boolean',
+                                    'input': 'checkbox',
+                                    'create': True,
+                                    'read': True,
+                                    'update': True
+                                },
+                                'read': {
+                                    'type': 'boolean',
+                                    'input': 'checkbox',
+                                    'create': True,
+                                    'read': True,
+                                    'update': True
+                                },
+                                'update': {
+                                    'type': 'boolean',
+                                    'input': 'checkbox',
+                                    'create': True,
+                                    'read': True,
+                                    'update': True
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+select = {
+    'schema':{
+        'allowed':{
+            'type': 'list',
+                                    'input': 'list',
+                                    'icon': '',
+                                    'create': True,
+                                    'read': True,
+                                    'update': True
+        }
+    }
+}
+
 DOMAIN = {
     'cats': cats,
     'catBreeds': catBreeds,
     'dogs': dogs,
     'dogBreeds': dogBreeds,
     'colors': colors,
-    'ceva': ceva
+    'ceva': ceva,
+    'settings': settings,
+    'select':select,
 }

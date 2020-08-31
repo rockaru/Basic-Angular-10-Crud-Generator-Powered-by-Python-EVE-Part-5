@@ -1,6 +1,6 @@
  
                 <mat-form-field  [formGroup]="myFormGroup" appearance="standard">
-                    <mat-label>{{key.name}}</mat-label>
+                    <mat-label>{{key.name| titlecase}}</mat-label>
                     <input matInput type="url" formControlName="{{key.name}}">
                     <mat-icon matSuffix>link</mat-icon>
 

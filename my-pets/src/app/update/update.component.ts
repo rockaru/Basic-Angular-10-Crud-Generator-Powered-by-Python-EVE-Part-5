@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 import { FormService } from '../form.service'
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 import { SocketService } from '../socket.service';
 import { DataService } from '../data.service';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -13,15 +13,11 @@ import { MatChipInputEvent } from '@angular/material/chips';
 export class UpdateComponent implements OnInit {
 
   info: string
+  item: any = []
   resource: string
   form: any = []
-  options: any = []
-  selected: any = {}
-  selectedFiles: any
-  selectedImages: any
-  item: any = []
-  id: string
   myFormGroup: FormGroup = new FormGroup({})
+  childForm: FormArray;
 
   constructor(
     private socketService: SocketService,
@@ -30,20 +26,16 @@ export class UpdateComponent implements OnInit {
     private dialogRef: MatDialogRef<UpdateComponent>,
     @Inject(MAT_DIALOG_DATA) data
   ) {
+    this.form = data.form
+    this.item = data.item
+console.log(this.item)
+    this.myFormGroup = this.formService.loadFormGroup(this.form, this.item)
+
+    this.init(this.form)
     this.resource = data.resource
     this.item = data.item
-    this.form = data.form
-    console.log(this.item)
-    for (let key of this.form) {
-
-      if (key.value.input == 'list') {
-        this.selected[key.name] = this.item[key.name]
-      }
-    }
-    this.loadOptions()
-    this.myFormGroup = this.formService.loadFormGroup(this.form, this.item)
     socketService.joinSocket(this.item._id)
-
+    this.loadInitialData(this.myFormGroup, this.form, this.item,"")
 
   }
 
@@ -55,42 +47,131 @@ export class UpdateComponent implements OnInit {
     })
   }
 
-  async loadOptions() {
-    for (let key of this.form) {
-
-      if (key.value.input == 'selectmulti') {
-
-
-        await this.dataService.getAll(key.value.schema.data_relation.resource).subscribe(data => {
-          this.selected[key.name] = this.item[key.name]
-          console.log(this.selected[key.name])
-          const c = data["_items"]
-          console.log(c)
-          this.options[key.name] = c
-          for (let i = 0; i < c.length; i++) {
-            
-            for (let j of this.selected[key.name]) {
-              if(typeof c[i] !== 'undefined'){
-              if (c[i]._id == j._id) {
-                this.options[key.name].splice(i, 1)
-                i--
-              }
-            }
-            }
-          }
-          console.log(this.options[key.name])
-          //this.options[key.name] = c.filter(x => this.selected[key.name].includes(x))
-        })
-      }
-      if (key.value.input == 'select') {
-        console.log(key.value)
-
-        await this.dataService.getAll(key.value.data_relation.resource).subscribe(data => {
-          this.options[key.name] = data["_items"]
-
-        })
+  init(form) {
+    for (let key of form) {
+      if (key.value.input == "multi") {
+        this.init(key.value.child)
+      } else if (key.value.input == "dict") {
+        this.init(key.value.child)
+      } else {
+        key.value.options = []
+        key.value.selected = []
       }
     }
+  }
+
+  loadInitialData(fg, form, item, parent?) {
+    
+    for (let key of form) {
+      switch (key.value.input) {
+        case 'multi':
+          if (item[key.name]) {
+            let i =1
+            while (i<item[key.name].length) {
+             
+                this.addChildForm(fg, key,item,parent,i)
+                i++
+
+            } 
+          
+           
+          }
+          break
+        case 'date':
+          fg.get(key.name).setValue(this.formatDate(item[key.name]))
+            fg.get(key.name).updateValueAndValidity
+          console.log(this.formatDate(item[key.name]))
+          break
+          case 'datetime':
+          fg.get(key.name).setValue(this.formatDateTime(item[key.name]))
+            fg.get(key.name).updateValueAndValidity
+          console.log(this.formatDateTime(item[key.name]))
+          break
+        case 'select':
+          if (item[key.name]) {
+           
+            fg.get(key.name).setValue(item[key.name])
+            fg.get(key.name).updateValueAndValidity
+            
+          }
+          break
+        case 'list':
+          
+            key.value.selected[parent + key.name] = item[key.name]
+
+         
+
+          break
+        case 'selectmulti':
+          
+            key.value.selected[parent + key.name] = this.loadEmbeddedItems(item[key.name],key)
+         
+
+          break
+        default:
+          if (item[key.name]) {
+            fg.get(key.name).setValue(item[key.name])
+            fg.get(key.name).updateValueAndValidity
+          }
+          break
+      }
+
+    }
+  }
+
+  formatDate(date) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+     
+
+    return [year, month, day].join('-');
+  }
+
+  formatDateTime(date) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year =  d.getFullYear(),
+hour = ''+ d.getHours(),
+minutes =''+ d.getMinutes();
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+      if (hour.length < 2)
+      hour = '0' + hour;
+    if (minutes.length < 2)
+      minutes = '0' + minutes;
+    return `${year}-${month}-${day}T${hour}:${minutes}`
+  }
+
+  loadEmbeddedItems(items,key) {
+    let em = []
+    for (let item of items) {
+      this.dataService.getOne(key.value.schema.data_relation.resource, item).subscribe(data => {
+        em.push(data)
+        
+      })
+    }
+    return em
+  }
+
+  async addChildForm(fg, key,item,parent,i) {
+
+    
+    this.childForm = fg.get(key.name) as FormArray;
+   
+    if(i!=1){
+    this.childForm.push(this.formService.loadFormGroup(key.value.child));
+    }
+    this.loadInitialData(this.childForm.controls[i-1],key.value.child,item[key.name][i-1],parent+key.name+(i-1))
   }
 
   loadData() {
@@ -99,51 +180,8 @@ export class UpdateComponent implements OnInit {
     })
   }
 
-  add(form, event: MatChipInputEvent) {
-    const input = event.input;
-    const element = event.value;
-    // Add our fruit
-    if ((element || '').trim()) {
-      this.selected[form.name].push(element)
-      this.myFormGroup.get(form.name).patchValue(this.selected[form.name])
-      this.myFormGroup.get(form.name).updateValueAndValidity()
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-
-
-  }
-
-  remove(form, value) {
-    const index = this.form.indexOf(value);
-    this.options[form.name].splice(index, 1)
-    this.myFormGroup.get(form.name).patchValue(this.options[form.name])
-    this.myFormGroup.get(form.name).updateValueAndValidity()
-  }
-
-  selectFile(event) {
-    this.selectedFiles = event.target.files;
-  }
-  uploadImage(event, form) {
-    const file = (event.target as HTMLInputElement).files[0];
-    this.myFormGroup.get(form).patchValue(file)
-    this.myFormGroup.get(form).updateValueAndValidity()
-    this.selectedImages = event.target.files;
-  }
-
-  uploadFile(event, form) {
-    const file = (event.target as HTMLInputElement).files[0];
-    this.myFormGroup.get(form).patchValue(file)
-    this.myFormGroup.get(form).updateValueAndValidity()
-    this.selectedFiles = event.target.files;
-  }
-
   save() {
     const formData = new FormData()
-    console.log(this.myFormGroup)
 
     for (let key of this.form) {
 
@@ -155,32 +193,45 @@ export class UpdateComponent implements OnInit {
 
 
     for (let key of this.form) {
-      console.log(this.myFormGroup.get(key.name).value)
       if (this.myFormGroup.get(key.name).touched) {
+
+
         formData.append(key.name, this.myFormGroup.get(key.name).value)
-      }
-      if (key.value.input == 'selectmulti') {
-        formData.delete(key.name)
-      }
-      if (key.value.input == 'list') {
-        formData.delete(key.name)
+        if (key.value.input == 'selectmulti') {
+          formData.delete(key.name)
+        }
+        if (key.value.input == 'list') {
+          formData.delete(key.name)
+        }
+        if (key.value.input == 'multi') {
+
+          this.cleanObject(this.myFormGroup.get(key.name), key)
+
+          formData.delete(key.name)
+        }
+        console.log("formgroup:", key.name, this.myFormGroup.get(key.name).value)
+
       }
     }
-    console.log("formdata", formData)
+
+
     this.dataService.update(this.resource, this.item._id, formData).subscribe(data => {
       console.log(data)
       for (let key of this.form) {
         if (key.value.input == 'selectmulti') {
-          const selected = this.selectedItems(key.name, this.selected[key.name])
-          console.log(selected)
-          this.dataService.update(this.resource, data["_id"], selected).subscribe(data => console.log(data))
+          if (this.myFormGroup.get(key.name).touched) {
+            this.saveListType(data["_id"], key)
+          }
         }
         if (key.value.input == 'list') {
-          let x = {}
-          x[key.name] = this.selected[key.name]
-          console.log(x)
-
-          this.dataService.update(this.resource, data["_id"], x).subscribe(data => console.log(data))
+          if (this.myFormGroup.get(key.name).touched) {
+            this.saveListType(data["_id"], key)
+          }
+        }
+        if (key.value.input == 'multi') {
+          if (this.myFormGroup.get(key.name).touched) {
+            this.saveListType(data["_id"], key)
+          }
         }
       }
       this.dialogRef.close("close");
@@ -190,21 +241,32 @@ export class UpdateComponent implements OnInit {
 
   }
 
-  selectedItems(field, obj) {
+  cleanObject(obj, key) {
+    let data = obj as FormArray
+    for (let i of data.controls) {
+      console.log(i)
 
-    let i = 0;
-    let data = {}
-    const items: any = []
-    console.log(obj)
-    for (let item of obj) {
-      console.log(item)
-      items[i] = item._id
-      i++
+      for (let item of key.value.child) {
+        if (item.value.input == 'multi') {
+          this.cleanObject(i.get(item.name), item)
+          console.log("test gol", i.get(item.name).value)
+          if (Object.keys(i.get(item.name).value[0]).length === 0) {
+            delete i.value[item.name]
+          }
+        } else {
+          if (i.get(item.name).untouched) {
+            delete i.value[item.name]
+          }
+        }
+      }
     }
-    data[field] = items
+  }
 
-    return data
-
+  saveListType(id, key) {
+    let x = {}
+    x[key.name] = this.myFormGroup.get(key.name).value
+    console.log("se salveaza", x)
+    this.dataService.update(this.resource, id, x).subscribe(data => console.log(data))
   }
 
 }

@@ -8,7 +8,7 @@ import { SocketService } from './socket.service'
 export class DataService {
 
   constructor(
-    private socketService:SocketService,
+    private socketService: SocketService,
     private httpClient: HttpClient
   ) { }
 
@@ -16,6 +16,20 @@ export class DataService {
 
     return this.httpClient.get(`api/${resource}`).pipe()
 
+  }
+
+  public getAllLocal(resource) {
+    let items = JSON.parse(localStorage.getItem(`data-${resource}`))
+
+    if (!items) {
+     return this.getAll(resource).subscribe(data => {
+        localStorage.setItem(`data-${resource}`, JSON.stringify(data["_items"]))
+
+        return data["_items"]
+      })
+    } else {
+      return items
+    }
   }
 
   public getOne(resource, id) {
@@ -27,16 +41,12 @@ export class DataService {
   }
 
   public update(resource, id, data) {
-    
-      return this.httpClient.patch(`api/${resource}/${id}`, data).pipe()
+
+    return this.httpClient.patch(`api/${resource}/${id}`, data).pipe()
   }
 
-  public delete(resource, id): Promise<any> {
-    return new Promise((resolve, reject) => {
-      return this.httpClient.delete(`api/${resource}/${id}`).pipe().subscribe(data => {
-        resolve(this.socketService.sendSocket(resource))
-      })
-    })
+  public delete(resource, id) {
+    return this.httpClient.delete(`api/${resource}/${id}`).pipe()
   }
 
 }

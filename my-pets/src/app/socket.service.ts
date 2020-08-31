@@ -8,7 +8,7 @@ export class SocketService {
   constructor() { }
 
 
-  public webSocket = new WebSocket('ws://localhost:6556')
+  public webSocket = new WebSocket('ws://192.168.0.17:6556')
 
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb28iOiJiYXIiLCJpYXQiOjE1OTU0MTM1MDF9.9NxLjgowzH5zVwxDdHMMEtznkgVWnvHVhQyEXviipMY";
 

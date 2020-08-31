@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { DataService } from './data.service'
 import { SocketService } from './socket.service'
+import {SpinnerService} from './spinner.service'
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 
 @Injectable({
@@ -15,21 +16,14 @@ export class FormService {
     private httpClient: HttpClient,
     private dataService: DataService,
     private socketService: SocketService,
+    private spinnerService:SpinnerService,
     private formBuilder: FormBuilder
   ) { }
 
   loadFormGroup(form, item?) {
     const group = {}
 
-    if (item) {
-      for (let element of form) {
-        if (element.value.input == 'select') {
-          group[element.name] = new FormControl(item[element.name]._id)
-        } else {
-          group[element.name] = new FormControl(item[element.name])
-        }
-      }
-    } else {
+    
 
       for (let element of form) {
         switch (element.value.input) {
@@ -42,41 +36,24 @@ export class FormService {
             break
 
           case "dict":
-            group[element.name] = this.formBuilder.array([this.loadFormGroup(element.value.child)])
+            group[element.name] = this.formBuilder.group([this.loadFormGroup(element.value.child)])
             break
+
+            case "combo":
+            group[element.name] = new FormControl('')
+              group[element.value.child] = this.formBuilder.group([])
+              break
             
           default:
             group[element.name] = new FormControl('')
             break
+          
         }
-
-      }
-    }
-    
-    return this.formBuilder.group(group)
-
-  }
-
-  createChildForm(element): FormGroup {
-    const group = {}
-    console.log(element)
-    for (let item in element) {
-      group[item] = new FormControl('')
+      
       
     }
     return this.formBuilder.group(group)
-  }
 
-  addChildForm(element): FormGroup {
-    const group = {}
-    for (let item of element) {
-      if(item.value.input=='multi'){
-        group[item.name] = this.formBuilder.array([this.loadFormGroup(item.value.child)])
-      }else{
-      group[item.name] = new FormControl('')
-      }
-    }
-    return this.formBuilder.group(group)
   }
 
   getForm(resource) {
@@ -94,9 +71,8 @@ export class FormService {
             items[item] = data[item];
             
       
-            if (data[item].input == "select") {
-              //data[item].options = this.loadOptions(resource, item, data[item].data_relation.resource)
-
+            if (data[item].input == "combo") {
+              data[item].child="test"
             }
             
             if (data[item].input == 'multi') {
@@ -110,13 +86,32 @@ export class FormService {
         case 'read':
           if (data[item].read) {
             items[item] = data[item];
+            if (data[item].input == "select") {
+              //data[item].options = this.loadOptions(resource, item, data[item].data_relation.resource)
+
+            }
+            
+            if (data[item].input == 'multi') {
+              data[item].child = this.loadChildFormItems(resource, data[item].schema.schema, scope)
+            }
+            if (data[item].input == 'dict') {
+              data[item].child = this.loadChildFormItems(resource, data[item].schema, scope)
+            }
           }
           break;
         case 'update':
           if (data[item].update) {
             items[item] = data[item];
             if (data[item].input == "select") {
-              data[item].options = this.loadOptions(resource, item, data[item].data_relation.resource)
+              //data[item].options = this.loadOptions(resource, item, data[item].data_relation.resource)
+
+            }
+            
+            if (data[item].input == 'multi') {
+              data[item].child = this.loadChildFormItems(resource, data[item].schema.schema, scope)
+            }
+            if (data[item].input == 'dict') {
+              data[item].child = this.loadChildFormItems(resource, data[item].schema, scope)
             }
           }
           break;
@@ -141,6 +136,28 @@ export class FormService {
       switch (scope) {
         case 'create':
           if (items[item].create) {
+           
+            if (items[item].input == 'multi') {
+              items[item].child = this.loadChildFormItems(resource, items[item].schema.schema, scope)
+            }
+            if (items[item].input == 'dict') {
+              items[item].child = this.loadChildFormItems(resource, items[item].schema, scope)
+            }
+          }
+          break
+          case 'update':
+          if (items[item].update) {
+           
+            if (items[item].input == 'multi') {
+              items[item].child = this.loadChildFormItems(resource, items[item].schema.schema, scope)
+            }
+            if (items[item].input == 'dict') {
+              items[item].child = this.loadChildFormItems(resource, items[item].schema, scope)
+            }
+          }
+          break
+          case 'read':
+          if (items[item].read) {
            
             if (items[item].input == 'multi') {
               items[item].child = this.loadChildFormItems(resource, items[item].schema.schema, scope)
@@ -182,111 +199,90 @@ export class FormService {
   }
 
   openRead(resource, component) {
+    this.spinnerService.changeState(true)
+let x
     const scope = "read"
     let form = JSON.parse(localStorage.getItem(`form-${resource}-${scope}`))
     if (!form) {
       this.getForm(resource).subscribe(form => {
         form = this.setStructure(resource, scope, form)
-        const embedded = {}
-        for (let item in form) {
-          if (form[item].value.input == 'select') {
-            embedded[form[item].name] = 1
-          }
-          if (form[item].value.input == 'selectmulti') {
-            embedded[form[item].name] = 1
-          }
-        }
-        const res = `${resource}?embedded=${JSON.stringify(embedded)}`
-        this.dataService.getAll(res).subscribe((data) => {
-
-          this.loadRead(form, data, resource, component)
-        })
+        
+        x =  this.loadRead(form,  resource, component)
+        
       })
     } else {
-      const embedded = {}
-      for (let item in form) {
-        if (form[item].value.input == 'select') {
-          embedded[form[item].name] = 1
-        }
-        if (form[item].value.input == 'selectmulti') {
-          embedded[form[item].name] = 1
-        }
-      }
-      const res = `${resource}?embedded=${JSON.stringify(embedded)}`
-      this.dataService.getAll(res).subscribe((data) => {
-        this.loadRead(form, data, resource, component)
-      })
+      
+        x = this.loadRead(form, resource, component)
+        
     }
-
+    x.afterOpened().subscribe(data=>{
+      this.spinnerService.changeState(false)
+    })
+    return x
 
   }
 
-  loadRead(form, data, resource, component) {
+  loadRead(form,  resource, component) {
     const dialogConfig = new MatDialogConfig()
     dialogConfig.data = {
-      items: data["_items"],
       resource: resource,
       form: form,
     }
-    const dialogRef = this.dialog.open(component, dialogConfig)
-    dialogRef.afterClosed().subscribe(
-      data => {
-        console.log(data)
-      }
-    )
+    return this.dialog.open(component, dialogConfig)
+    
   }
 
   openCreate(resource, component) {
+    this.spinnerService.changeState(true)
+    let x
     const scope = "create"
     let form = JSON.parse(localStorage.getItem(`form-${resource}-${scope}`))
-    const options = []
-    const keys = Object.keys(localStorage)
-    for (let i of keys) {
-      if (i.indexOf(`options-for-form-${resource}`) == 0) {
-        const name = i.slice(`options-for-form-${resource}-`.length, i.length)
-        options[name] = JSON.parse(localStorage.getItem(i))
-        console.log(name)
-      }
-
-    }
+    
     if (!form) {
       this.getForm(resource).subscribe(form => {
         form = this.setStructure(resource, scope, form)
-        return this.loadCreate(form, options, resource, scope, component)
+        x= this.loadCreate(form, resource,  component)
       })
     } else {
-      return this.loadCreate(form, options, resource, scope, component)
+      x= this.loadCreate(form, resource, component)
+      
     }
-
+    x.afterOpened().subscribe(data=>{
+      this.spinnerService.changeState(false)
+    })
+    return x
   }
 
-  loadCreate(form, options, resource, scope, component) {
+  loadCreate(form, resource,  component) {
     const dialogConfig = new MatDialogConfig()
     dialogConfig.data = {
       resource: resource,
       form: form,
-      options: options,
-      scope: scope
     }
-    const dialogRef = this.dialog.open(component, dialogConfig)
-    return dialogRef
+    return this.dialog.open(component, dialogConfig)
+     
   }
 
   openUpdate(resource, item, component) {
+    this.spinnerService.changeState(true)
+    let x
     const scope = "update"
     let form = JSON.parse(localStorage.getItem(`form-${resource}-${scope}`))
     if (!form) {
       form = this.getForm(resource).subscribe(form => {
         form = this.setStructure(resource, scope, form)
-        this.loadUpdate(form, item, resource, component)
+      x= this.loadUpdate(form, item, resource, component)
       })
     } else {
-      this.loadUpdate(form, item, resource, component)
+      x= this.loadUpdate(form, item, resource, component)
     }
+    x.afterOpened().subscribe(data=>{
+      this.spinnerService.changeState(false)
+    })
+    return x
   }
 
   loadUpdate(form, item, resource, component) {
-    let dialogRef
     const dialogConfig = new MatDialogConfig()
     dialogConfig.data = {
       item: item,
@@ -294,18 +290,9 @@ export class FormService {
       form: form,
     }
 
-    dialogRef = this.dialog.open(component, dialogConfig)
+    return this.dialog.open(component, dialogConfig)
 
-    dialogRef.afterClosed().subscribe(
-      data => {
-        if (data) {
-          this.dataService.update(resource, item._id, data)
-
-        }
-
-
-      }
-    )
+    
 
   }
 

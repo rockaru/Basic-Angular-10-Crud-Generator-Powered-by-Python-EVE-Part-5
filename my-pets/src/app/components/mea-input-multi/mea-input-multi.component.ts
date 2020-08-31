@@ -13,7 +13,8 @@ export class MeaInputMultiComponent implements OnInit {
   @Input('form-group') myFormGroup: FormGroup
   @Input() key
   @Input() selected
-  @Input() options
+  @Input() parent
+  @Input() index
   controls:any
 
   childForm:FormArray
@@ -35,26 +36,8 @@ export class MeaInputMultiComponent implements OnInit {
     let i = this.childForm.length
     console.log(i)
     console.log(key.value.child)
-    this.childForm.push(this.formService.addChildForm(key.value.child));
-    for(let item of key.value.child){
-      if (item.value.input == 'selectmulti') {
-        await this.dataService.getAll(item.value.schema.data_relation.resource).subscribe(data => {
-          item.value.options[i] = data["_items"]
-          item.value.selected[i] = []
-
-        })
-
-      }
-      if(item.value.input == 'select'){
-        await this.dataService.getAll(item.value.data_relation.resource).subscribe(data => {
-          item.value.options[i] = data["_items"]
-          item.value.selected[i] = []
-
-        })
-
-
-      }
-    }
+    this.childForm.push(this.formService.loadFormGroup(key.value.child));
+    
   }
 
 }

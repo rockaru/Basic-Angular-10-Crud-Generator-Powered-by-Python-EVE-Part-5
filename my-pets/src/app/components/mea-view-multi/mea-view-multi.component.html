@@ -1,0 +1,32 @@
+<mat-card-subtitle>{{title}}</mat-card-subtitle>
+
+<mat-card *ngFor="let item of items">
+    <ng-container *ngFor="let key of form">
+      
+        
+          <ng-container [ngSwitch]="key.value.input">
+           
+             <mea-view-text *ngSwitchCase="'text'" [key]="key.name" [item]="item[key.name]"></mea-view-text>
+             <mea-view-number *ngSwitchCase="'number'" [key]="key.name" [item]="item[key.name]"></mea-view-number>
+             <mea-view-textarea *ngSwitchCase="'textarea'" [key]="key.name" [item]="item[key.name]"></mea-view-textarea>
+             <mea-view-date *ngSwitchCase="'date'" [key]="key.name" [item]="item[key.name]"></mea-view-date>
+             <mea-view-datetime *ngSwitchCase="'datetime'" [key]="key.name" [item]="item[key.name]"></mea-view-datetime>
+             <mea-view-email *ngSwitchCase="'email'" [key]="key.name" [item]="item[key.name]"></mea-view-email>
+             <mea-view-image *ngSwitchCase="'image'" [key]="key.name" [item]="item[key.name]"></mea-view-image>
+             <mea-view-tel *ngSwitchCase="'tel'" [key]="key.name" [item]="item[key.name]"></mea-view-tel>
+             <mea-view-url *ngSwitchCase="'url'" [key]="key.name" [item]="item[key.name]"></mea-view-url>
+             <mea-view-radio *ngSwitchCase="'radio'" [key]="key.name" [item]="item[key.name]"></mea-view-radio>
+             <mea-view-select *ngSwitchCase="'select'" [key]="key" [item]="item[key.name]"></mea-view-select>
+             <mea-view-multi *ngSwitchCase="'multi'" [title]="key.name" [form]="key.value.child" [item]="item[key.name]"></mea-view-multi>
+            
+            
+            
+            
+            
+            
+          </ng-container>
+        
+      
+    </ng-container>
+    
+  </mat-card>

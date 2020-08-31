@@ -9,10 +9,11 @@ const app = express();
 app.use(express.static('example'));
 const bserver = http.createServer(app);
 const webPort = 6556;
+const webHost = '192.168.0.17';
 
 var secret ="shhhhh"
 
-bserver.listen(webPort, function () {
+bserver.listen(webPort,webHost, function () {
     console.log('Web server start. http://localhost:' + webPort);
 });
 const wss = new WebSocket.Server({ server: bserver });

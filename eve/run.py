@@ -19,9 +19,15 @@ class MyValidator(Validator):
         def _validate_icon(self,alias,field,value):
                 """ {'type':'string'} """
                 pass
+        def _validate_colection(self,alias,field,value):
+                """ {'type':'list'} """
+                pass
+        def _validate_display(self,alias,field,value):
+                """ {'type':'string'} """
+                pass
                         
 
 app = Eve(validator=MyValidator)
 
 if __name__ == '__main__':
-        app.run()
+        app.run(host='0.0.0.0',port='5000')

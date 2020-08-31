@@ -1,0 +1,76 @@
+
+                        <mea-input-number *ngSwitchCase="'number'"
+                            [form-group]="myFormGroup.get(key.name)['controls'][i]" [key]="child"></mea-input-number>
+                        <mea-input-textarea *ngSwitchCase="'textarea'"
+                            [form-group]="myFormGroup.get(key.name)['controls'][i]" [key]="child"></mea-input-textarea>
+                        <mea-input-email *ngSwitchCase="'email'" [form-group]="myFormGroup.get(key.name)['controls'][i]"
+                            [key]="child"></mea-input-email>
+                        <mea-input-date *ngSwitchCase="'date'" [form-group]="myFormGroup.get(key.name)['controls'][i]"
+                            [key]="child"></mea-input-date>
+                        <mea-input-datetime *ngSwitchCase="'datetime'"
+                            [form-group]="myFormGroup.get(key.name)['controls'][i]" [key]="child"></mea-input-datetime>
+                        <mea-input-tel *ngSwitchCase="'tel'" [form-group]="myFormGroup.get(key.name)['controls'][i]" [key]="child"></mea-input-tel>
+                        <mea-input-password *ngSwitchCase="'password'"
+                            [form-group]="myFormGroup.get(key.name)['controls'][i]" [key]="child"></mea-input-password>
+                        <mea-input-url *ngSwitchCase="'url'" [form-group]="myFormGroup.get(key.name)['controls'][i]" [key]="child"></mea-input-url>
+                        <mea-input-image *ngSwitchCase="'image'" [form-group]="myFormGroup.get(key.name)['controls'][i]"
+                            [key]="child"></mea-input-image>
+                        <mea-input-file *ngSwitchCase="'file'" [form-group]="myFormGroup.get(key.name)['controls'][i]"
+                            [key]="child"></mea-input-file>
+                        <mea-input-checkbox *ngSwitchCase="'checkbox'"
+                            [form-group]="myFormGroup.get(key.name)['controls'][i]" [key]="child"></mea-input-checkbox>
+                            <mea-input-list *ngSwitchCase="'list'" [parent]='parent+i' [form-group]="myFormGroup.get(key.name)['controls'][i]"
+                            [key]="child"></mea-input-list>
+                        <mea-input-select *ngSwitchCase="'select'" [parent]='parent+i' [index]="i"
+                            [form-group]="myFormGroup.get(key.name)['controls'][i]" [key]="child"></mea-input-select>
+
+                        <mea-input-dual-list *ngSwitchCase="'selectmulti'" [parent]='parent+i' [index]="i"
+                            [form-group]="myFormGroup.get(key.name)['controls'][i]" [key]="child"></mea-input-dual-list>
+
+                            <mea-input-dict *ngSwitchCase="'dict'" [(form-group)]="myFormGroup.get(key.name)['controls'][i]"
+                            [key]="child"></mea-input-dict>
+
+                        <mea-input-multi *ngSwitchCase="'multi'" [parent]='parent+i+child.name' [index]="i"
+                            [(form-group)]="myFormGroup.get(key.name)['controls'][i]" [key]="child"></mea-input-multi>
+                        
+
+
+<h2 mat-dialog-title>Add {{resource | titlecase}}</h2>
+
+<mat-dialog-content>
+
+    <form [formGroup]="myFormGroup">
+
+        <div *ngFor="let key of form">
+            <div [ngSwitch]="key.value.input">
+                <mea-input-text *ngSwitchCase="'text'" [form-group]="myFormGroup" [key]="key"></mea-input-text>
+                <mea-input-number *ngSwitchCase="'number'" [form-group]="myFormGroup" [key]="key"></mea-input-number>
+                <mea-input-textarea *ngSwitchCase="'textarea'" [form-group]="myFormGroup" [key]="key"></mea-input-textarea>
+                <mea-input-email *ngSwitchCase="'email'" [form-group]="myFormGroup" [key]="key"></mea-input-email>
+                <mea-input-date *ngSwitchCase="'date'" [form-group]="myFormGroup" [key]="key"></mea-input-date>
+                <mea-input-datetime *ngSwitchCase="'datetime'" [form-group]="myFormGroup" [key]="key"></mea-input-datetime>
+                <mea-input-tel *ngSwitchCase="'tel'" [form-group]="myFormGroup" [key]="key"></mea-input-tel>
+                <mea-input-password *ngSwitchCase="'password'" [form-group]="myFormGroup" [key]="key"></mea-input-password>
+                <mea-input-url *ngSwitchCase="'url'" [form-group]="myFormGroup" [key]="key"></mea-input-url>
+                <mea-input-image *ngSwitchCase="'image'" [form-group]="myFormGroup" [key]="key"></mea-input-image>
+                <mea-input-file *ngSwitchCase="'file'" [form-group]="myFormGroup" [key]="key"></mea-input-file>
+                <mea-input-checkbox *ngSwitchCase="'checkbox'" [form-group]="myFormGroup" [key]="key"></mea-input-checkbox>
+                <mea-input-select *ngSwitchCase="'select'"  index='0' [parent]='key.name' [form-group]="myFormGroup" [key]="key"></mea-input-select>
+                <mea-input-radio *ngSwitchCase="'selectradio'" [(options)]="key.value.allowed" [form-group]="myFormGroup" [key]="key"></mea-input-radio>
+                <mea-input-list *ngSwitchCase="'list'" [parent]='key.name' [form-group]="myFormGroup" [key]="key"></mea-input-list>
+                <mea-input-dual-list *ngSwitchCase="'selectmulti'" [parent]='key.name' index=0 [form-group]="myFormGroup" [key]="key"></mea-input-dual-list>
+                <mea-input-multi *ngSwitchCase="'multi'" [parent]='key.name'  index=0 [(form-group)]="myFormGroup" [key]="key"></mea-input-multi>
+                <mea-input-dict *ngSwitchCase="'dict'" [parent]='key.name'  index=0 [(form-group)]="myFormGroup" [key]="key"></mea-input-dict>
+               
+            </div>
+        </div>
+    </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+
+    <button mat-raised-button color="accent" (click)="save()">Save</button>
+    <button mat-button type="button" color="primary" matDialogClose>Close</button>
+
+</mat-dialog-actions>

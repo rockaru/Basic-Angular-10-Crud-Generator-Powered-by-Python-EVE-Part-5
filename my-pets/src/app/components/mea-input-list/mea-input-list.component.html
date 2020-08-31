@@ -2,8 +2,8 @@
     <mat-label>{{key.name}}</mat-label>
 
     <mat-chip-list #chipList formControlName="{{key.name}}">
-        <mat-chip *ngFor="let item of key.value.selected" [selectable]="selectable"
-            [removable]="removable" (removed)="remove(key,item)">
+        <mat-chip *ngFor="let item of key.value.selected[parent+key.name]" [selectable]="selectable"
+            [removable]="removable" (removed)="remove(key,$event)">
             {{item}}
             <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>

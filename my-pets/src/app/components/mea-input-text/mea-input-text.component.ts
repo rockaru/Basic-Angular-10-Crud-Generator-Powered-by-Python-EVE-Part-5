@@ -9,7 +9,6 @@ import { FormGroup } from '@angular/forms';
 export class MeaInputTextComponent implements OnInit {
 
   @Input('form-group') myFormGroup: FormGroup
-  @Input('form-group-name') i: any
   @Input() key:any
 
   constructor() { }

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MeaFormComponent } from './mea-form.component';
+import { MeaViewEmailComponent } from './mea-view-email.component';
 
-describe('MeaFormComponent', () => {
-  let component: MeaFormComponent;
-  let fixture: ComponentFixture<MeaFormComponent>;
+describe('MeaViewEmailComponent', () => {
+  let component: MeaViewEmailComponent;
+  let fixture: ComponentFixture<MeaViewEmailComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MeaFormComponent ]
+      declarations: [ MeaViewEmailComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MeaFormComponent);
+    fixture = TestBed.createComponent(MeaViewEmailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,141 +1,50 @@
 <ng-container [formGroup]="myFormGroup" >
     <label id="label-{{key.name}}">{{key.name}}</label>
-    <ng-container formArrayName="{{key.name}}"
-        *ngFor="let childForm of myFormGroup.get(key.name)['controls'];let i=index">
-
-        <br>
-        <ng-container formGroupName="{{i}}" style="border-width: 2px; border-color: black; background-color: antiquewhite;">
+    
             <ng-container *ngFor="let child of key.value.child">
                 <ng-container [ngSwitch]="child.value.input">
 
 
-                    <mat-form-field *ngSwitchCase="'text'" appearance="standard">
-                        <mat-label>{{child.name}}</mat-label>
-                        <input matInput formControlName="{{child.name}}">
-                        <mat-icon matSuffix>text_format</mat-icon>
-                        <mat-placeholder>{{child.name}}</mat-placeholder>
-                    </mat-form-field>
-                    <mat-form-field *ngSwitchCase="'number'" appearance="standard">
-                        <mat-label>{{child.name}}</mat-label>
-                        <input matInput type="number" formControlName="{{child.name}}">
-                        <mat-icon matSuffix>exposure_zero</mat-icon>
-                        <mat-placeholder>{{child.name}}</mat-placeholder>
-                    </mat-form-field>
-                    <mat-form-field *ngSwitchCase="'textarea'" appearance="standard">
-                        <mat-label>{{child.name}}</mat-label>
-                        <textarea matInput formControlName="{{child.name}}"></textarea>
-                        <mat-icon matSuffix>text_fields</mat-icon>
+                    <mea-input-number *ngSwitchCase="'number'"
+                    [form-group]="myFormGroup" [key]="child"></mea-input-number>
+                <mea-input-textarea *ngSwitchCase="'textarea'"
+                    [form-group]="myFormGroup" [key]="child"></mea-input-textarea>
+                <mea-input-email *ngSwitchCase="'email'" [form-group]="myFormGroup"
+                    [key]="child"></mea-input-email>
+                <mea-input-date *ngSwitchCase="'date'" [form-group]="myFormGroup"
+                    [key]="child"></mea-input-date>
+                <mea-input-datetime *ngSwitchCase="'datetime'"
+                    [form-group]="myFormGroup" [key]="child"></mea-input-datetime>
+                <mea-input-tel *ngSwitchCase="'tel'" [form-group]="myFormGroup" [key]="child"></mea-input-tel>
+                <mea-input-password *ngSwitchCase="'password'"
+                    [form-group]="myFormGroup" [key]="child"></mea-input-password>
+                <mea-input-url *ngSwitchCase="'url'" [form-group]="myFormGroup" [key]="child"></mea-input-url>
+                <mea-input-image *ngSwitchCase="'image'" [form-group]="myFormGroup"
+                    [key]="child"></mea-input-image>
+                <mea-input-file *ngSwitchCase="'file'" [form-group]="myFormGroup"
+                    [key]="child"></mea-input-file>
+                <mea-input-checkbox *ngSwitchCase="'checkbox'"
+                    [form-group]="myFormGroup" [key]="child"></mea-input-checkbox>
+                <mea-input-text *ngSwitchCase="'text'" [form-group]="myFormGroup"
+                    [key]="child"></mea-input-text>
 
-                        <mat-placeholder>{{child.name}}</mat-placeholder>
-                    </mat-form-field>
-                    <mat-form-field *ngSwitchCase="'email'" appearance="standard">
-                        <mat-label>{{child.name}}</mat-label>
-                        <input matInput type="email" formControlName="{{child.name}}">
-                        <mat-icon matSuffix>email</mat-icon>
+                <mea-input-list *ngSwitchCase="'list'" [parent]='parent+i' [form-group]="myFormGroup"
+                    [key]="child"></mea-input-list>
+                <mea-input-select *ngSwitchCase="'select'" [parent]='parent+i' [index]="i"
+                    [form-group]="myFormGroup" [key]="child"></mea-input-select>
 
-                        <mat-placeholder>{{child.name}}</mat-placeholder>
-                    </mat-form-field>
-                    <mat-form-field *ngSwitchCase="'date'" appearance="standard">
-                        <mat-label>{{child.name}}</mat-label>
-                        <input matInput type="date" formControlName="{{child.name}}">
-                        <mat-icon matSuffix></mat-icon>
-
-                        <mat-placeholder>{{child.name}}</mat-placeholder>
-                    </mat-form-field>
-                    <mat-form-field *ngSwitchCase="'datetime'" appearance="standard">
-                        <mat-label>{{child.name}}</mat-label>
-                        <input matInput type="datetime-local" formControlName="{{child.name}}">
-                        <mat-icon matSuffix></mat-icon>
-
-                        <mat-placeholder>{{child.name}}</mat-placeholder>
-                    </mat-form-field>
-
-                    <mat-form-field *ngSwitchCase="'tel'" appearance="standard">
-                        <mat-label>{{child.name}}</mat-label>
-                        <input matInput type="tel" formControlName="{{child.name}}">
-                        <mat-icon matSuffix>phone</mat-icon>
-
-                        <mat-placeholder>{{child.name}}</mat-placeholder>
-                    </mat-form-field>
-                    <mat-form-field *ngSwitchCase="'password'" appearance="standard">
-                        <mat-label>{{child.name}}</mat-label>
-                        <input matInput [type]="hide ? 'password' : 'text'" formControlName="{{child.name}}">
-                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-                            [attr.aria-pressed]="hide">
-                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        </button>
-
-                        <mat-placeholder>{{child.name}}</mat-placeholder>
-                    </mat-form-field>
-                    <mat-form-field *ngSwitchCase="'url'" appearance="standard">
-                        <mat-label>{{child.name}}</mat-label>
-                        <input matInput type="url" formControlName="{{child.name}}">
-                        <mat-icon matSuffix>link</mat-icon>
-
-                        <mat-placeholder>{{child.name}}</mat-placeholder>
-                    </mat-form-field>
-                    <ng-container *ngSwitchCase="'checkbox'" appearance="standard">
+                <mea-input-dual-list *ngSwitchCase="'selectmulti'" [parent]='parent+i' [index]="i"
+                    [form-group]="myFormGroup" [key]="child"></mea-input-dual-list>
 
 
-                        <mat-icon matSuffix>filter_vintage</mat-icon>
-                        <mat-checkbox formControlName="{{child.name}}">{{child.name}}</mat-checkbox>
 
-                    </ng-container>
-                    <mat-form-field *ngSwitchCase="'select'" appearance="standard">
-                        <mat-label>{{child.name}}</mat-label>
-                        <mat-select formControlName="{{child.name}}">
-                            <mat-option *ngFor="let item of options[key.name+'-'+child.name+'-'+i]"
-                                [value]="item._id||item">
-                                {{item.name||item}}
-                            </mat-option>
-                        </mat-select>
-                        <mat-icon matSuffix>note_add</mat-icon>
-
-                        <mat-placeholder>{{child.name}}</mat-placeholder>
-                    </mat-form-field>
-                    <ng-container *ngSwitchCase="'selectradio'" appearance="standard">
-                        <label id="label-{{child.name}}">{{child.name}}</label>
-                        <mat-radio-group class="radio-group" formControlName="{{child.name}}">
-
-                            <mat-radio-button class="radio-button"
-                                *ngFor="let i of key.value.options" value="{{i}}">
-                                {{i}}
-                            </mat-radio-button>
-
-                        </mat-radio-group>
-
-                    </ng-container>
-                    <mat-form-field *ngSwitchCase="'list'" appearance="standard">
-                        <mat-label>{{child.name}}</mat-label>
-
-                        <mat-chip-list #chipList formControlName="{{child.name}}">
-                            <mat-chip *ngFor="let item of key.value.selected"
-                                [selectable]="selectable" [removable]="removable" (removed)="remove(key,item)">
-                                {{item}}
-                                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                            </mat-chip>
-                            <input placeholder="New {{child.name}}..." [matChipInputFor]="chipList"
-                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                                (matChipInputTokenEnd)="add(child,$event)">
-                        </mat-chip-list>
-                        <mat-icon matSuffix>filter_vintage</mat-icon>
-
-                    </mat-form-field>
-                    <ng-container *ngSwitchCase="'selectmulti'">
-                        <label id="label-{{child.name}}">{{child.name}}</label>
-                        <material-dual-listbox [(source)]="key.value.options" [filter]="true"
-                            [(destination)]="key.value.selected"
-                            (destinationChange)="test($event)">
-                        </material-dual-listbox>
-                    </ng-container>
-
-                    <mea-input-multi *ngSwitchCase="'multi'" [(selected)]="selected" [(options)]="options" [(form-group)]="myFormGroup.get(key.name)['controls'][i]" [key]="child"></mea-input-multi>
-
+                <mea-input-multi *ngSwitchCase="'multi'" [parent]='parent+i+child.name' [index]="i"
+                    [(form-group)]="myFormGroup" [key]="child"></mea-input-multi>
+                <mea-input-dict *ngSwitchCase="'dict'" [parent]='parent+i+child.name' [index]="i" [(form-group)]="myFormGroup"
+                    [key]="child"></mea-input-dict>
 
                 </ng-container>
             </ng-container>
-        </ng-container>
-
-    </ng-container>
+        
     
 </ng-container>

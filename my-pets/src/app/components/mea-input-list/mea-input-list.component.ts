@@ -12,7 +12,7 @@ export class MeaInputListComponent implements OnInit {
 
   @Input('form-group') myFormGroup: FormGroup
   @Input() key
-  @Input() selected
+  @Input() parent
   removable = true;
   addOnBlur = true
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -20,6 +20,9 @@ export class MeaInputListComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    if(!this.key.value.selected[this.parent+this.key.name]){
+    this.key.value.selected[this.parent+this.key.name]=[]
+    }
   }
 
   add(form, event: MatChipInputEvent) {
@@ -27,8 +30,8 @@ export class MeaInputListComponent implements OnInit {
     const element = event.value;
     // Add our fruit
     if ((element || '').trim()) {
-      this.key.value.selected.push(element)
-      this.myFormGroup.get(form.name).patchValue(this.key.value.selected)
+      this.key.value.selected[this.parent+this.key.name].push(element)
+      this.myFormGroup.get(form.name).patchValue(this.key.value.selected[this.parent+this.key.name])
       this.myFormGroup.get(form.name).updateValueAndValidity()
     }
 
@@ -42,8 +45,8 @@ export class MeaInputListComponent implements OnInit {
 
   remove(key, value) {
     const index = key.indexOf(value);
-    this.key.value.selected.splice(index, 1)
-    this.myFormGroup.get(key.name).patchValue(this.key.value.selected)
+    this.key.value.selected[this.parent+this.key.name].splice(index, 1)
+    this.myFormGroup.get(key.name).patchValue(this.key.value.selected[this.parent+this.key.name])
     this.myFormGroup.get(key.name).updateValueAndValidity()
   }
 }

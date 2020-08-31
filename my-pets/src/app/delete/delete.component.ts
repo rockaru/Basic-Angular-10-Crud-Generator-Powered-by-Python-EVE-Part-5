@@ -50,7 +50,11 @@ export class DeleteComponent implements OnInit {
   }
 
   delete(){
-    this.dialogRef.close("delete");
+    this.dataService.delete(this.resource,this.item._id).subscribe(data=>{
+      localStorage.removeItem(`data-${this.resource}`)
+      this.dialogRef.close("delete");
+
+    })
   }
 
 }
