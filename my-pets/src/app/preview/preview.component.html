@@ -1,0 +1,10 @@
+<mat-dialog-content id="print"  >
+<div [innerHtml]="header | safeHtml"></div>
+<div [innerHtml]="body | safeHtml" #test></div>
+<img [src]="signatureImage" *ngIf="signatureImage" style="width: 250px;height: auto;"/>
+<material-sign *ngIf="!signatureImage" (done)="showImage($event)"></material-sign>
+<div [innerHtml]="footer | safeHtml" ></div>
+</mat-dialog-content>
+<button *ngIf="signatureImage" (click)="toPrint()">Print</button>
+<button *ngIf="signatureImage" (click)="generatePDF()">Descarca PDF</button>
+<button *ngIf="signatureImage" (click)="close()">Save</button>

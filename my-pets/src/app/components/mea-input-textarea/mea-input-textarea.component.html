@@ -1,7 +1,14 @@
-<mat-form-field  [formGroup]="myFormGroup" appearance="standard">
-    <mat-label>{{key.name}}</mat-label>
-    <textarea matInput formControlName="{{key.name}}"></textarea>
-    <mat-icon matSuffix>text_fields</mat-icon>
-
-    <mat-placeholder>{{key.name}}</mat-placeholder>
+<div *ngIf="showPre && key.meta.show_create_pre" [innerHtml]="key.meta.pre_create"></div>
+<mat-form-field   [formGroup]="myFormGroup" appearance="standard">
+    <mat-label *ngIf="showLabel && key.meta.show_create_label"><span *ngIf="!key.meta.label">{{key.name}}</span><span *ngIf="key.meta.label">{{key.meta.label}}</span><span *ngIf="key.meta.required" style="color: red;"> *</span></mat-label>
+    <textarea matInput rows="{{key.meta.text_rows}}" cols="{{key.meta.text_rows}}"
+        formControlName="{{key.name}}"></textarea>
+        <mat-icon *ngIf="showIcon && key.meta.show_create_icon" matSuffix>{{key.meta.icon}}</mat-icon>
+    <mat-hint *ngIf="showHint  && key.meta.show_hint">{{key.meta.hint}}</mat-hint>
+    <ng-container *ngIf="hasErrors()">
+        <mat-error *ngIf="isRequired()"><span *ngIf="!key.meta.label">{{key.name}}</span><span *ngIf="key.meta.label">{{key.meta.label}}</span> is required.</mat-error>
+        <mat-error *ngIf="isMinLength()"><span *ngIf="!key.meta.label">{{key.name}}</span><span *ngIf="key.meta.label">{{key.meta.label}}</span> must be at least {{key.meta.minlength}} characters long.</mat-error>   
+    </ng-container>
 </mat-form-field>
+<div *ngIf="showAfter && key.meta.show_create_after" [innerHtml]="key.meta.after_create"></div>
+

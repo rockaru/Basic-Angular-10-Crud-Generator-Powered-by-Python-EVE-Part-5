@@ -1,7 +1,29 @@
-<mat-form-field  [formGroup]="myFormGroup" appearance="standard">
-    <mat-label>{{key.name}}</mat-label>
-    <input matInput type="tel" formControlName="{{key.name}}">
-    <mat-icon matSuffix>phone</mat-icon>
+<mea-pre [show]="showPre" [key]="key"></mea-pre>
+    <mat-form-field [formGroup]="meaFg" appearance="standard">
+        <mat-label *ngIf="showLabel && key.meta.show_label.create">
+            <span *ngIf="!key.meta.label">{{key.name}}</span>
+            <span *ngIf="key.meta.label">{{key.meta.label}}</span>
+            <span *ngIf="key.meta.required" style="color: red;"> *</span>
+        </mat-label>
+        <input matInput type="tel" name="{{key.name}}" pattern="{{key.meta.pattern}}" formControlName="{{key.name}}">
 
-    <mat-placeholder>{{key.name}}</mat-placeholder>
-</mat-form-field>
+        <mat-icon *ngIf="showIcon && key.meta.show_icon.create" matSuffix>{{key.meta.icon}}</mat-icon>
+        <mat-hint *ngIf="showHint  && key.meta.show_hint">{{key.meta.hint}}</mat-hint>
+        <ng-container *ngIf="hasErrors()">
+            <mat-error *ngIf="isRequired()">
+                <span *ngIf="!key.meta.label">{{key.name}}</span>
+                <span *ngIf="key.meta.label">{{key.meta.label}}</span> is required.
+            </mat-error>
+            <mat-error *ngIf="isMinLength()">
+                <span *ngIf="!key.meta.label">{{key.name}}</span>
+                <span *ngIf="key.meta.label">{{key.meta.label}}</span> must be at least {{key.meta.minlength}} characters
+                long.
+            </mat-error>
+            <mat-error *ngIf="isMaxLength()">
+                <span *ngIf="!key.meta.label">{{key.name}}</span>
+                <span *ngIf="key.meta.label">{{key.meta.label}}</span> must be at most {{key.meta.maxlength}} characters
+                long.
+            </mat-error>
+        </ng-container>
+    </mat-form-field>
+    <mea-after [show]="showAfter" [key]="key"></mea-after>

@@ -1,370 +1,340 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { DataService } from './data.service'
-import { SocketService } from './socket.service'
-import {SpinnerService} from './spinner.service'
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormService {
-
+  pages = []
   constructor(
     private dialog: MatDialog,
     private httpClient: HttpClient,
-    private dataService: DataService,
-    private socketService: SocketService,
-    private spinnerService:SpinnerService,
     private formBuilder: FormBuilder
   ) { }
 
-  loadFormGroup(form, item?) {
-    const group = {}
-
-    
-
-      for (let element of form) {
-        switch (element.value.input) {
-          case "list":
-            group[element.name] = new FormControl('[]')
-            break
-
-          case "multi":
-            group[element.name] = this.formBuilder.array([this.loadFormGroup(element.value.child)])
-            break
-
-          case "dict":
-            group[element.name] = this.formBuilder.group([this.loadFormGroup(element.value.child)])
-            break
-
-            case "combo":
-            group[element.name] = new FormControl('')
-              group[element.value.child] = this.formBuilder.group([])
-              break
-            
-          default:
-            group[element.name] = new FormControl('')
-            break
-          
+  init() {
+    if (localStorage.length == 0) {
+      this.httpClient.get(`api/form`).pipe().subscribe(x => {
+        for (let item in x) {
+          this.loadForm(item, "read")
+          this.loadForm(item, "create")
+          this.loadForm(item, "update")
         }
-      
-      
+      })
     }
-    return this.formBuilder.group(group)
-
   }
 
-  getForm(resource) {
+  loadItems() {
+    const items = []
+    this.httpClient.get(`api/form`).pipe().subscribe(x => {
+      for (let item in x) {
+        items.push(item)
+      }
+    })
 
-    return this.httpClient.get(`api/form/${resource}`).pipe()
+    return items
+  }
 
+  loadFormGroup(form, item?) {
+    const group = {}
+    for (let key of form) {
+      const validators = []
+      if (key.meta.required) {
+        validators.push(Validators.required)
+      }
+      if (key.meta.minlength) {
+        validators.push(Validators.minLength(key.meta.minlength))
+      }
+      if (key.meta.maxlength) {
+        validators.push(Validators.maxLength(key.meta.maxlength))
+      }
+      switch (key.meta.input) {
+        case 'date':
+          if (key.meta.fill_default) {
+            let d = new Date(),
+              month = '' + (d.getMonth() + 1),
+              day = '' + d.getDate(),
+              year = d.getFullYear();
+
+            if (month.length < 2)
+              month = '0' + month;
+            if (day.length < 2)
+              day = '0' + day;
+            const date = [year, month, day].join('-')
+            group[key.name] = new FormControl(date, validators)
+
+          } else {
+            group[key.name] = new FormControl('', validators)
+          }
+          break
+
+        case 'time':
+          if (key.meta.fill_default) {
+            let d = new Date(),
+              hour = '' + (d.getHours().toLocaleString()),
+              minute = '' + d.getMinutes().toLocaleString();
+
+
+            if (hour.length < 2)
+              hour = '0' + hour;
+            if (minute.length < 2)
+              minute = '0' + minute;
+            const date = [hour, minute].join(':')
+            group[key.name] = new FormControl(date, validators)
+
+          } else {
+            group[key.name] = new FormControl('', validators)
+          }
+          break
+        case "list":
+          if (key.meta.fill_default) {
+            group[key.name] = new FormControl(key.meta.default, validators)
+
+          } else {
+            group[key.name] = new FormControl([], validators)
+          }
+          break
+        case "multi":
+          group[key.name] = this.formBuilder.array([this.loadFormGroup(key.meta.child)])
+          break
+        case "dict":
+          group[key.name] = this.loadFormGroup(key.meta.child)
+          break
+        case "combo":
+          group[key.name] = new FormControl('', validators)
+          group[key.meta.combo_name] = this.formBuilder.group([])
+          break
+        default:
+          if (key.meta.fill_default) {
+            group[key.name] = new FormControl(key.meta.default, validators)
+
+          } else {
+            group[key.name] = new FormControl('', validators)
+          }
+          break
+      }
+
+    }
+    return this.formBuilder.group(group)
   }
 
   setStructure(resource, scope, data) {
     const items = []
     for (let item in data) {
-      switch (scope) {
-        case 'create':
-          if (data[item].create) {
+      if (data[item].form_page) {
+        this.pages.push(data[item].form_page)
+      }
+      if (item != "meta") {
+        if (item != "_id") {
+          if (data[item].display) {
+            switch (scope) {
+              case 'create':
+                if (data[item].display["create"]) {
+                  items[item] = data[item];
+                  switch (data[item].input) {
+                    case "multi":
+                      data[item].child = this.setStructure(resource, scope, data[item].schema.schema)
+                      break
+                    case "dict":
+                      data[item].child = this.setStructure(resource, scope, data[item].schema)
+                      break
+
+                  }
+
+                }
+                break;
+              case 'read':
+                if (data[item].display["read"]) {
+                  items[item] = data[item];
+
+                  switch (data[item].input) {
+                    case "multi":
+                      data[item].child = this.setStructure(resource, scope, data[item].schema.schema)
+                      break
+                    case "dict":
+                      data[item].child = this.setStructure(resource, scope, data[item].schema)
+                      break
+                  }
+                }
+                break;
+              case 'update':
+                if (data[item].display["update"]) {
+                  items[item] = data[item];
+                  switch (data[item].input) {
+                    case "multi":
+                      data[item].child = this.setStructure(resource, scope, data[item].schema.schema)
+                      break
+                    case "dict":
+                      data[item].child = this.setStructure(resource, scope, data[item].schema)
+                      break
+                  }
+                }
+                break;
+              case 'delete':
+                if (data[item].display["delete"]) {
+                  items[item] = data[item];
+                  switch (data[item].input) {
+                    case "multi":
+                      data[item].child = this.setStructure(resource, scope, data[item].schema.schema)
+                      break
+                    case "dict":
+                      data[item].child = this.setStructure(resource, scope, data[item].schema)
+                      break
+                  }
+                }
+                break;
+              case 'details':
+                if (data[item].display["details"]) {
+                  items[item] = data[item];
+
+                  switch (data[item].input) {
+                    case "multi":
+                      data[item].child = this.setStructure(resource, scope, data[item].schema.schema)
+                      break
+                    case "dict":
+                      data[item].child = this.setStructure(resource, scope, data[item].schema)
+                      break
+                  }
+                }
+                break;
+            }
+          } else {
             items[item] = data[item];
-            
-      
-            if (data[item].input == "combo") {
-              data[item].child="test"
-            }
-            
-            if (data[item].input == 'multi') {
-              data[item].child = this.loadChildFormItems(resource, data[item].schema.schema, scope)
-            }
-            if (data[item].input == 'dict') {
-              data[item].child = this.loadChildFormItems(resource, data[item].schema, scope)
-            }
-          }
-          break;
-        case 'read':
-          if (data[item].read) {
-            items[item] = data[item];
-            if (data[item].input == "select") {
-              //data[item].options = this.loadOptions(resource, item, data[item].data_relation.resource)
+            switch (data[item].input) {
+              case "multi":
+                data[item].child = this.setStructure(resource, scope, data[item].schema.schema)
+                break
+              case "dict":
+                data[item].child = this.setStructure(resource, scope, data[item].schema)
+                break
 
             }
-            
-            if (data[item].input == 'multi') {
-              data[item].child = this.loadChildFormItems(resource, data[item].schema.schema, scope)
-            }
-            if (data[item].input == 'dict') {
-              data[item].child = this.loadChildFormItems(resource, data[item].schema, scope)
-            }
           }
-          break;
-        case 'update':
-          if (data[item].update) {
-            items[item] = data[item];
-            if (data[item].input == "select") {
-              //data[item].options = this.loadOptions(resource, item, data[item].data_relation.resource)
-
-            }
-            
-            if (data[item].input == 'multi') {
-              data[item].child = this.loadChildFormItems(resource, data[item].schema.schema, scope)
-            }
-            if (data[item].input == 'dict') {
-              data[item].child = this.loadChildFormItems(resource, data[item].schema, scope)
-            }
-          }
-          break;
+        }
       }
     }
     const form = []
     for (let item in items) {
       form.push({
         name: item,
-        value: items[item]
+        meta: items[item]
       })
-
     }
-    localStorage.setItem(`form-${resource}-${scope}`, JSON.stringify(form))
+
     return form;
   }
 
-  loadChildFormItems(resource, items, scope) {
-    const form = []
-
-    for (let item in items) {
-      switch (scope) {
-        case 'create':
-          if (items[item].create) {
-           
-            if (items[item].input == 'multi') {
-              items[item].child = this.loadChildFormItems(resource, items[item].schema.schema, scope)
-            }
-            if (items[item].input == 'dict') {
-              items[item].child = this.loadChildFormItems(resource, items[item].schema, scope)
-            }
-          }
-          break
-          case 'update':
-          if (items[item].update) {
-           
-            if (items[item].input == 'multi') {
-              items[item].child = this.loadChildFormItems(resource, items[item].schema.schema, scope)
-            }
-            if (items[item].input == 'dict') {
-              items[item].child = this.loadChildFormItems(resource, items[item].schema, scope)
-            }
-          }
-          break
-          case 'read':
-          if (items[item].read) {
-           
-            if (items[item].input == 'multi') {
-              items[item].child = this.loadChildFormItems(resource, items[item].schema.schema, scope)
-            }
-            if (items[item].input == 'dict') {
-              items[item].child = this.loadChildFormItems(resource, items[item].schema, scope)
-            }
-          }
-          break
-      }
-    }
-    for (let item in items) {
-      form.push({
-        name: item,
-        value: items[item]
-      })
-
-    }
-    return form
-  }
-
-  loadOptions(resource, field, data) {
-    const items = []
-    this.dataService.getAll(data).subscribe(data => {
-
-      data = data["_items"]
-      for (let item in data) {
-
-        items.push({
-          "name": data[item].name,
-          "_id": data[item]._id
-        })
-
-      }
-      localStorage.setItem(`options-for-form-${resource}-${field}`, JSON.stringify(items))
-      console.log(items)
-    })
-    return items
-  }
-
-  openRead(resource, component) {
-    this.spinnerService.changeState(true)
-let x
-    const scope = "read"
-    let form = JSON.parse(localStorage.getItem(`form-${resource}-${scope}`))
-    if (!form) {
-      this.getForm(resource).subscribe(form => {
-        form = this.setStructure(resource, scope, form)
-        
-        x =  this.loadRead(form,  resource, component)
-        
+  loadForm(resource, scope) {
+    let data = localStorage.getItem(`form-${resource}-${scope}`)
+    if (!data) {
+      this.httpClient.get(`api/form/${resource}`).pipe().subscribe(x => {
+        let form = this.setStructure(resource, scope, x)
+        localStorage.setItem(`form-${resource}-${scope}`, JSON.stringify(form))
+        localStorage.setItem(`form-${resource}-meta`, JSON.stringify(x['meta']))
+        return form
       })
     } else {
-      
-        x = this.loadRead(form, resource, component)
-        
+      return JSON.parse(localStorage.getItem(`form-${resource}-${scope}`))
     }
-    x.afterOpened().subscribe(data=>{
-      this.spinnerService.changeState(false)
-    })
-    return x
-
   }
 
-  loadRead(form,  resource, component) {
+  loadMeta(resource) {
+    let data = localStorage.getItem(`form-${resource}-meta`)
+    if (!data) {
+      this.loadForm(resource, 'create')
+    } else {
+      return JSON.parse(localStorage.getItem(`form-${resource}-meta`))
+
+    }
+  }
+
+  openRead(resource, component, detailsRoute?, routeParam?) {
+    const scope = "read"
+    let form = this.loadForm(resource, scope)
     const dialogConfig = new MatDialogConfig()
+    dialogConfig.hasBackdrop = false
+    dialogConfig.closeOnNavigation = false
     dialogConfig.data = {
       resource: resource,
       form: form,
+      detailsRoute: detailsRoute,
+      routeParam: routeParam
     }
     return this.dialog.open(component, dialogConfig)
-    
   }
 
   openCreate(resource, component) {
-    this.spinnerService.changeState(true)
-    let x
     const scope = "create"
-    let form = JSON.parse(localStorage.getItem(`form-${resource}-${scope}`))
-    
-    if (!form) {
-      this.getForm(resource).subscribe(form => {
-        form = this.setStructure(resource, scope, form)
-        x= this.loadCreate(form, resource,  component)
-      })
-    } else {
-      x= this.loadCreate(form, resource, component)
-      
-    }
-    x.afterOpened().subscribe(data=>{
-      this.spinnerService.changeState(false)
-    })
-    return x
-  }
-
-  loadCreate(form, resource,  component) {
+    let form = this.loadForm(resource, scope)
     const dialogConfig = new MatDialogConfig()
+    dialogConfig.hasBackdrop = false
+    dialogConfig.closeOnNavigation = false
+    dialogConfig.width = '60vw'
     dialogConfig.data = {
       resource: resource,
       form: form,
     }
     return this.dialog.open(component, dialogConfig)
-     
   }
 
   openUpdate(resource, item, component) {
-    this.spinnerService.changeState(true)
-    let x
-    const scope = "update"
-    let form = JSON.parse(localStorage.getItem(`form-${resource}-${scope}`))
-    if (!form) {
-      form = this.getForm(resource).subscribe(form => {
-        form = this.setStructure(resource, scope, form)
-      x= this.loadUpdate(form, item, resource, component)
-      })
-    } else {
-      x= this.loadUpdate(form, item, resource, component)
-    }
-    x.afterOpened().subscribe(data=>{
-      this.spinnerService.changeState(false)
-    })
-    return x
-  }
 
-  loadUpdate(form, item, resource, component) {
+    const scope = "update"
+    let form = this.loadForm(resource, scope)
     const dialogConfig = new MatDialogConfig()
+    dialogConfig.hasBackdrop = false
+    dialogConfig.closeOnNavigation = false
     dialogConfig.data = {
       item: item,
       resource: resource,
       form: form,
     }
-
     return this.dialog.open(component, dialogConfig)
-
-    
-
   }
 
   openDelete(resource, item, component) {
     const scope = "read"
-    let form = JSON.parse(localStorage.getItem(`form-${resource}-${scope}`))
-    if (!form) {
-      form = this.getForm(resource).subscribe(form => {
-        form = this.setStructure(resource, scope, form)
-        this.loadDelete(form, item, resource, component)
-      })
-    } else {
-      this.loadDelete(form, item, resource, component)
-    }
-  }
-
-  loadDelete(form, item, resource, component) {
-
+    let form = this.loadForm(resource, scope)
     const dialogConfig = new MatDialogConfig()
-
+    dialogConfig.hasBackdrop = false
+    dialogConfig.closeOnNavigation = false
     dialogConfig.data = {
       item: item,
       resource: resource,
       form: form,
     }
-
-    const dialogRef = this.dialog.open(component, dialogConfig)
-
-    dialogRef.afterClosed().subscribe(
-      data => {
-        if (data) {
-          this.dataService.delete(resource, item._id)
-        }
-      }
-    )
-
+    return this.dialog.open(component, dialogConfig)
   }
 
   openDetails(resource, item, component) {
-
     const scope = "read"
-    let form = JSON.parse(localStorage.getItem(`form-${resource}-${scope}`))
-
-    if (!form) {
-
-      form = this.getForm(resource).subscribe(form => {
-
-        form = this.setStructure(resource, scope, form)
-        this.loadDetails(form, item, resource, component)
-
-      })
-
-    } else {
-
-      this.loadDetails(form, item, resource, component)
-
-    }
-
-  }
-
-  loadDetails(form, item, resource, component) {
-
+    let form = this.loadForm(resource, scope)
     const dialogConfig = new MatDialogConfig()
-
+    dialogConfig.hasBackdrop = false
+    dialogConfig.closeOnNavigation = false
     dialogConfig.data = {
       item: item,
       resource: resource,
       form: form,
     }
-
-    const dialogRef = this.dialog.open(component, dialogConfig)
-
+    return this.dialog.open(component, dialogConfig)
   }
 
+  openPreview(resource, formGroup, title, item, component) {
+    const scope = "create"
+    let form = this.loadForm(resource, scope)
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.hasBackdrop = false
+    dialogConfig.closeOnNavigation = false
+    dialogConfig.data = {
+      item: item,
+      formGroup: formGroup,
+      resource: resource,
+      form: form,
+      title: title
+    }
+    return this.dialog.open(component, dialogConfig)
+  }
 }

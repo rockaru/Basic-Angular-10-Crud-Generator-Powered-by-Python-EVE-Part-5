@@ -1,2 +1,2 @@
-<mat-card-subtitle>{{key}}</mat-card-subtitle>
+<mat-card-subtitle *ngIf="showLabel">{{key}}</mat-card-subtitle>
 <p [matTooltip]="key">{{item  | titlecase}}</p>

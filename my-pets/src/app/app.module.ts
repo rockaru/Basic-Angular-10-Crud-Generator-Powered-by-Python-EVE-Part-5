@@ -1,32 +1,53 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { NgxEditorModule } from 'ngx-editor';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { MaterialDualListboxModule } from 'mea-material-dual-listbox'
+import { MaterialSignModule } from 'material-sign'
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { IndexComponent } from './index/index.component';
+import { SafeHtmlPipe } from './safeHtml'
+import { DynamicHTMLModule } from './dynamic-html'
+import { QuillConfig, QuillModule } from "ngx-quill";
+import * as Quill from "quill";
+import QuillBetterTable from "quill-better-table";
+import { ImageResize } from 'quill-image-resize-module';
+
 import { ReadComponent } from './read/read.component';
 import { CreateComponent } from './create/create.component';
 import { UpdateComponent } from './update/update.component';
-
-import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from "@angular/material/dialog";
-import {MatTableModule} from '@angular/material/table';
-import {MatFormFieldModule} from '@angular/material/form-field'
-import {MatInputModule} from '@angular/material/input'
-import {MatButtonModule} from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatIconModule} from '@angular/material/icon';
-import {MaterialDualListboxModule} from 'mea-material-dual-listbox'
-import {MatChipsModule} from '@angular/material/chips';
-import {MatCardModule} from '@angular/material/card';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
-import {MatGridListModule} from '@angular/material/grid-list';
-
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { DeleteComponent } from './delete/delete.component';
 import { DetailsComponent } from './details/details.component';
+import { CreateDialogComponent } from './create/create-dialog.component';
+import { ReadDialogComponent } from './read-dialog/read-dialog.component';
+import { PreviewComponent } from './preview/preview.component';
+import { PreviewDialogComponent } from './preview/preview-dialog.component';
+
+import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from "@angular/material/dialog";
+import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatInputModule } from '@angular/material/input'
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSidenavModule } from '@angular/material/sidenav';
+
+import {DragDropModule} from '@angular/cdk/drag-drop';
+
 import { MeaInputMultiComponent } from './components/mea-input-multi/mea-input-multi.component';
 import { MeaInputTextComponent } from './components/mea-input-text/mea-input-text.component';
 import { MeaInputNumberComponent } from './components/mea-input-number/mea-input-number.component';
@@ -63,6 +84,42 @@ import { MeaViewRadioComponent } from './components/mea-view-radio/mea-view-radi
 import { MeaViewDualListComponent } from './components/mea-view-dual-list/mea-view-dual-list.component';
 import { MeaViewDictComponent } from './components/mea-view-dict/mea-view-dict.component';
 import { MeaInputComboComponent } from './components/mea-input-combo/mea-input-combo.component';
+import { MeaInputRichtextComponent } from './components/mea-input-richtext/mea-input-richtext.component';
+import { MeaInputTimeComponent } from './components/mea-input-time/mea-input-time.component';
+import { MeaInputSignComponent } from './components/mea-input-sign/mea-input-sign.component';
+import { MeaTemplateComponent } from './template/template.component'
+
+import { FisaComponent } from './fisa/fisa.component';
+import { ViewFisaComponent } from './view-fisa/view-fisa.component';
+import { PreComponent } from './components/pre/pre.component';
+import { AfterComponent } from './components/after/after.component';
+
+Quill.register(
+  {
+    "modules/better-table": QuillBetterTable
+  },
+  true
+);
+
+
+
+const quillConfig: QuillConfig = {
+  modules: {
+    table: false, // disable table module
+    "better-table": {
+      operationMenu: {
+
+        color: {
+          colors: ["#fff", "red", "rgb(0, 0, 0)"], // colors in operationMenu
+          text: "Background Colors" // subtitle
+        }
+      }
+    },
+    keyboard: {
+      bindings: QuillBetterTable.keyboardBindings
+    }
+  }
+};
 
 @NgModule({
   declarations: [
@@ -108,6 +165,20 @@ import { MeaInputComboComponent } from './components/mea-input-combo/mea-input-c
     MeaViewDualListComponent,
     MeaViewDictComponent,
     MeaInputComboComponent,
+    MeaInputRichtextComponent,
+    MeaTemplateComponent,
+    FisaComponent,
+    ViewFisaComponent,
+    IndexComponent,
+    CreateDialogComponent,
+    ReadDialogComponent,
+    MeaInputTimeComponent,
+    MeaInputSignComponent,
+    PreviewComponent,
+    PreviewDialogComponent,
+    SafeHtmlPipe,
+    PreComponent,
+    AfterComponent,
   ],
   imports: [
     BrowserModule,
@@ -116,6 +187,7 @@ import { MeaInputComboComponent } from './components/mea-input-combo/mea-input-c
     MatDialogModule,
     HttpClientModule,
     ReactiveFormsModule,
+    NgxEditorModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -129,10 +201,24 @@ import { MeaInputComboComponent } from './components/mea-input-combo/mea-input-c
     FormsModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-MatGridListModule
+    MatGridListModule,
+    MatToolbarModule,
+    MatExpansionModule,
+    AppRoutingModule,
+    MaterialSignModule,
+    MatMenuModule,
+    MatButtonToggleModule,
+    MatSidenavModule,
+    DragDropModule,
+    QuillModule.forRoot(quillConfig),
+    DynamicHTMLModule.forRoot({
+      components: [
+        { component: CreateComponent, selector: 'mea-list' }
+      ]
+    })
   ],
   providers: [
-    {provide: MAT_DIALOG_DEFAULT_OPTIONS,useValue:{maxWidth:'200vw',autoFocus:true}},
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {  autoFocus: true, disableClose: true, panelClass: 'dialog-mod' } },
   ],
   bootstrap: [AppComponent],
   entryComponents: [ReadComponent]

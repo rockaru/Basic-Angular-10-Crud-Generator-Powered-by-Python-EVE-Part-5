@@ -1,13 +1,33 @@
-<mat-card>
+<mat-toolbar >
+    <mat-icon *ngIf="showIcon && key.meta.show_icon.create" matSuffix>{{key.meta.icon}}</mat-icon>
+    <mat-label *ngIf="showLabel && key.meta.show_label.create"><span *ngIf="!key.meta.label">{{key.name}}</span><span *ngIf="key.meta.label">{{key.meta.label}}</span><span *ngIf="key.meta.required" style="color: red;"> *</span></mat-label>
+    <span style="flex: 1 1 auto;"></span>
+    
+    <mat-hint *ngIf="showHint  && key.meta.show_hint">{{key.meta.hint}}</mat-hint>
+
+            <span style="flex: 1 1 auto;"></span>
+            <button mat-icon-button (click)="addChildForm(myFormGroup,key)">
+                <mat-icon>add</mat-icon> 
+            </button>
+    </mat-toolbar>
+<mat-card [ngStyle]="{'background-color': bgColor}">
+<div *ngIf="showPre && key.meta.show_create_pre" [innerHtml]="key.meta.pre_create"></div>
     <ng-container [formGroup]="myFormGroup">
-        <label id="label-{{key.name}}">{{key.name}}</label>
+        
+    <mat-card-content >
+
         <ng-container formArrayName="{{key.name}}"
             *ngFor="let childForm of myFormGroup.get(key.name)['controls'];let i=index">
-
-            <br>
+           
+            <mat-card class="item">
+                <div *ngIf="i>0" style="text-align: right;">
+                    <button mat-icon-button (click)="removeChildForm(myFormGroup,key,i)">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                </div>  
             <ng-container formGroupName="{{i}}">
-                <ng-container *ngFor="let child of key.value.child">
-                    <ng-container [ngSwitch]="child.value.input">
+                <ng-container *ngFor="let child of key.meta.child">
+                    <ng-container [ngSwitch]="child.meta.input">
 
 
 
@@ -55,10 +75,12 @@
                     </ng-container>
                 </ng-container>
             </ng-container>
+            </mat-card>
 
         </ng-container>
-        <br><button mat-icon-button matSuffix (click)="addChildForm(myFormGroup,key)">
-            Add {{key.name}}<mat-icon>add</mat-icon>
-        </button>
+    </mat-card-content>
+
     </ng-container>
+<div *ngIf="showAfter && key.meta.show_create_after" [innerHtml]="key.meta.after_create"></div>
+
 </mat-card>

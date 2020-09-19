@@ -7,11 +7,33 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./mea-input-date.component.scss']
 })
 export class MeaInputDateComponent implements OnInit {
-
-  constructor() { }
-  @Input('form-group') myFormGroup: FormGroup
+ 
+  @Input('form-group') meaFg: FormGroup
   @Input() key:any
+ 
+  @Input() showPre =true
+  @Input() showAfter = true
+  @Input() showLabel =true
+  @Input() showHint = true
+  @Input() showIcon = true
+  constructor() { }
+ 
   ngOnInit(): void {
+  }
+
+  hasErrors(){
+    return (this.meaFg.get(this.key.name).invalid && (this.meaFg.get(this.key.name).dirty || this.meaFg.get(this.key.name).touched))
+  }
+
+  isRequired(){
+    return (this.meaFg.get(this.key.name).errors.required)
+  }
+
+  isMinLength(){
+    return (this.meaFg.get(this.key.name).errors.minlength)
+  }
+  isMaxLength(){
+    return (this.meaFg.get(this.key.name).errors.maxlength)
   }
 
 }

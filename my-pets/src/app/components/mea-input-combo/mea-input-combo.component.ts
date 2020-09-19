@@ -25,39 +25,30 @@ export class MeaInputComboComponent implements OnInit {
   }
 
   async loadOptions() {
-    console.log(this.myFormGroup)
-    if (this.key.value.colections) {
-      this.key.value.options[this.parent + this.key.name] = this.key.value.colections
+    if (this.key.meta.colections) {
+      this.key.meta.options[this.parent + this.key.name] = this.key.meta.colections
     } 
   }
 
   onSelected(event){
     const scope = "create"
     let testFg: FormGroup =new FormGroup({})
-    this.childForm = JSON.parse(localStorage.getItem(`form-${event.value}-${scope}`))
+    this.childForm = this.formService.loadForm(event.value,scope)
     
-    if (!this.childForm) {
-      this.formService.getForm(event.value).subscribe(form => {
-        form = this.formService.setStructure(event.value, scope, form)
-        this.childForm = form
-      })
-    } 
     this.init(this.childForm)
-    console.log(this.childForm)
     testFg=this.formService.loadFormGroup(this.childForm)
-    this.myFormGroup.controls[this.key.value.child] = (testFg)
-    console.log("after",this.myFormGroup)
+    this.myFormGroup.controls[this.key.meta.child] = (testFg)
   }
 
   init(form) {
     for (let key of form) {
-      if (key.value.input == "multi") {
-        this.init(key.value.child)
-      } else if (key.value.input == "dict") {
-        this.init(key.value.child)
+      if (key.meta.input == "multi") {
+        this.init(key.meta.child)
+      } else if (key.meta.input == "dict") {
+        this.init(key.meta.child)
       } else {
-        key.value.options = []
-        key.value.selected = []
+        key.meta.options = []
+        key.meta.selected = []
       }
     }
   }

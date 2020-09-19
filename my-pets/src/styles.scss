@@ -1,3 +1,24 @@
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.bubble.css';
+@import '~quill/dist/quill.snow.css';
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-dialog-container{
+    padding:0!important;
+    padding-bottom: 5px!important;
+    overflow:hidden!important;
+}
+.mat-dialog-actions {
+    padding: 0!important;
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 52px;
+    align-items: center;
+    margin-bottom: 0 !important;
+    margin-left:10px!important;
+    margin-right:10px!important;
+}
+.mat-form-field-infix{
+    width: 60vw;
+    }

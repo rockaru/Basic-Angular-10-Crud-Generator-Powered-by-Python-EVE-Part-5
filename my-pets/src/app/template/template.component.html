@@ -1,0 +1,119 @@
+<mat-grid-list cols="2" rowHeight="80vh" style="width: 100%;">
+        <mat-grid-tile>
+        <mat-card style="background-color:rgb(253, 247, 237);width: 99vw; height: 50vh;">
+            
+           
+            <mat-card-content style="text-align: center;">
+
+                <ng-container *ngFor="let key of form">
+
+                        <ng-container [ngSwitch]="key.meta.input">
+                            <mea-input-text class="input" *ngSwitchCase="'text'" [form-group]="meaFg" [key]="key">
+                            </mea-input-text>
+
+
+                    </ng-container>
+                </ng-container>
+
+                <mat-form-field appearance="standard">
+                    <mat-label>Optiuni</mat-label>
+                    <mat-select [(ngModel)]="selected" (ngModelChange)="onResourceChange($event)">
+                        <mat-option *ngFor="let item of resources" value="{{item}}">
+                            {{item}}
+                        </mat-option>
+                    </mat-select>
+
+                </mat-form-field>
+                <mat-chip-list>
+                    <ng-container *ngFor="let key of variables">
+                        <ng-container [ngSwitch]="key.meta.input">
+
+                            <ng-container *ngSwitchCase='multi' (click)="onInsertText(key)">{{key.name}}
+                                            
+                                fdf
+                                <ng-container *ngFor="let key of key.meta.child">
+                                                <button mat-raised-button color="primary" (click)="onInsertText(key)">{{key.name}}</button>
+
+                                                </ng-container>
+                                            
+                            </ng-container>
+
+                            <button mat-raised-button color="primary" *ngSwitchDefault (click)="onInsertText(key)">{{key.name}}</button>
+                        </ng-container>
+                    </ng-container>
+                </mat-chip-list>
+                <ng-container [formGroup]="meaFg" class="input">
+                    <quill-editor [styles]="{height: '40vh'}" format="html" trackChanges="all"
+                        (onEditorCreated)="editorCreated($event)" formControlName="document">
+                        <div quill-editor-toolbar>
+                            <span class="ql-formats">
+                                <select class="ql-font">
+                                    <option selected></option>
+                                    <option value="serif"></option>
+                                    <option value="monospace"></option>
+                                </select>
+                                <select class="ql-size">
+                                    <option value="small"></option>
+                                    <option selected></option>
+                                    <option value="large"></option>
+                                    <option value="huge"></option>
+                                </select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-bold"></button>
+                                <button class="ql-italic"></button>
+                                <button class="ql-underline"></button>
+                                <button class="ql-strike"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <select class="ql-color"></select>
+                                <select class="ql-background"></select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-list" value="ordered"></button>
+                                <button class="ql-list" value="bullet"></button>
+                                <select class="ql-align">
+                                    <option selected></option>
+                                    <option value="center"></option>
+                                    <option value="right"></option>
+                                    <option value="justify"></option>
+                                </select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-link"></button>
+                                <button class="ql-image"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button value="ordered" (click)="addNewtable()">Table</button>
+                            </span>
+
+                        </div>
+                    </quill-editor>
+
+
+                </ng-container>
+
+
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button color="accent" (click)="toPrint()">Print Preview</button>
+    
+                <button mat-raised-button color="accent" (click)="save()">Save</button>
+            
+                </mat-card-actions>
+
+        </mat-card>
+    </mat-grid-tile>
+        <mat-grid-tile >
+    
+                  
+    <mat-card  id="template-preview" style="width: 99vw; height: 50vh; overflow-y: scroll;" [innerHtml]="content | safeHtml">
+        
+    </mat-card>
+
+</mat-grid-tile>
+        </mat-grid-list>
+        
+    
+       
+    

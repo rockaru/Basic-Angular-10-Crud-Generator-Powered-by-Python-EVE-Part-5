@@ -1,0 +1,163 @@
+<header style="text-align: center;">        <p class="c36"><img
+          alt="" src="images/image1.png"
+          style="width: 120px; height: 60px; margin-left: -0.00px; margin-top: -0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
+          title=""></p>
+      
+        <p class="c36 c45"><span class="c78">Ploiesti, Str. Tunari, Nr.26 &nbsp; Tel.: 0760232207 J 29/2593/2007
+            &bull; RO22547387 &bull; 4294/T/2017 &bull; 5382/A/2015 &bull; 5405/A/2015</span></p>
+<div class="header">
+    <h1>Deviz Interventie</h1>
+    <h2>Nr
+      {{numar}}
+
+      din
+      {{data}}
+
+    </h2>
+  </div>
+</header>
+
+  <table>
+    <tr class="row">
+      <td class="col-3">Client</td>
+      <td class="col-9">{{client}}</td>
+    </tr>
+    <tr class="row">
+      <td class="col-3">Unitate</td>
+      <td class="col-9">{{unitate}}</td>
+    </tr>
+    <tr class="row">
+      <td class="col-3">Adresa</td>
+      <td class="col-9">{{adresa}}</td>
+    </tr>
+    <tr class="row">
+      <td class="col-3">Nr. Telefon</td>
+      <td class="col-9">{{contact}}</td>
+    </tr>
+    <tr class="row">
+      <td class="col-3">Persoana Contact</td>
+      <td class="col-9">{{persoana contact}}</td>
+    </tr>
+    <tr class="row">
+      <td class="col-3">Specialist Service</td>
+      <td class="col-9">{{specialisti service}}</td>
+    </tr>
+    <tr class="row">
+      <td class="col-3">Data Interventiei</td>
+      <td class="col-3">{{data interventie}}</td>
+      <td class="col-1" style="border-top:1px solid;border-right:0px;border-bottom:0px"></td>
+      <td class="col-5 " style="border-right:0px;border-left:0px"></td>
+    </tr>
+    <tr class="row">
+      <td class="col-3">Ora Sosirii</td>
+      <td class="col-3">{{ora sosirii}}</td>
+      <td class="col-1"  style="border-top:0px;border-bottom:0px"></td>
+      <td class="col-3">Garantie</td>
+      <td class="col-1" >{{garantie}}</td>
+      <td class="col-1" >{{!garantie}}</td>
+
+    </tr>
+    <tr class="row">
+      <td class="col-3">Ora Plecarii</td>
+      <td class="col-3">{{ora plecarii}}</td>
+      <td class="col-1"  style="border-top:0px;border-bottom:0px"></td>
+      <td class="col-3">Urgenta</td>
+      <td class="col-1" >{{urgenta}}</td>
+      <td class="col-1" >{{!urgenta}}</td>
+    </tr>
+    <tr class="row">
+      <td class="col-3" style="border-bottom: 2px solid;">Nr. Km.</td>
+      <td class="col-3" style="border-bottom: 2px solid;">{{nr km}}</td>
+      <td class="col-1" style="border-top:0px;border-right:0px;border-bottom:0px"></td>
+      <td class="col-5 " style="border-right:0px;border-left:0px;border-bottom:0px"></td>
+
+
+    </tr>
+  </table>
+<br>
+
+  <table class="for">
+    <tr class="row">
+      <td class="col-12">DEFECT RAPORTAT / CONSTATAT / MODALITATE DE INTERVENTIE</td>
+    </tr>
+    <tr class="row">
+      <td class="col-12" style="border-bottom: 2px solid;"><p>{{defect raportat}}</p><p>{{defect constatat}}</p><p>{{interventie}}</p></td>
+     
+    </tr>
+  </table>
+<br>
+
+  <table  class="for">
+    <tr class="row">
+      <td class="col-12">MATERIALE SI ECHIPAMENTE FOLOSITE</td>
+    </tr>
+    <tr class="row" style="text-align: center;">
+      <td class="col-1">Nr. Crt.</td>
+      <td class="col-10">Echipamente</td>
+      <td class="col-1">Cant</td>
+    </tr>
+    <tr class="row">{{materiale si echipamente}}
+      /#/
+      <td class="col-1">{{index}}</td>
+      <td class="col-10">{{echipamente}}</td>
+      <td class="col-1">{{cantitate}}</td>
+      /#/
+    </tr>
+  </table>
+<br>
+  <table  class="for">
+    <tr class="row">
+      <td class="col-12">MANOPERA</td>
+    </tr>
+    <tr class="row" style="text-align: center;">
+      <td class="col-1">Nr. Crt.</td>
+      <td class="col-10">Specialist</td>
+      <td class="col-1">Nr. Ore</td>
+    </tr>
+    <tr class="row" *ngFor="let item of ">{{manopera}}
+      /#/
+      <td class="col-1">{{index}}</td>
+      <td class="col-10">{{specialist}}</td>
+      <td class="col-1">{{nr ore}}</td>
+      /#/
+    </tr>
+  </table>
+<br>
+    
+  <table  class="for">
+    <tr class="row">
+      <td class="col-12">Observatii</td>
+    </tr>
+    <tr class="row">
+      
+      <td class="col-12">{{observatii}}</td>
+      
+    </tr>
+  </table>
+<br>
+  
+  <table  class="for">
+    <tr class="row">
+      <td class="col-12">CONFIRMARE BENEFICIAR (Nume/ prenume, semnatura si stampila)</td>
+    </tr>
+    <tr class="row">
+      <td class="col-6 no-border"><b>{{nume}}</b></td>
+      
+    </tr>
+    <tr>
+      <td id="actions">
+<button action="toPrint">Print</button>
+
+      </td>
+    </tr>
+  </table>
+  <footer style="text-align: center;">
+    <p class="c36"><img
+          alt="" src="images/image2.png"
+          style="width: 615.01px; height: 40.87px; margin-left: -0.00px; margin-top: -0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
+          title=""></p>
+    <p class="c18"><span class="c12"></span></p>
+    <p class="c18 c77"><span class="c12"></span></p>
+    </footer>
+  
+ 

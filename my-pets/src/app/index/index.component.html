@@ -1,0 +1,26 @@
+<mat-toolbar color="primary">
+    <button [matMenuTriggerFor]="menu" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="view.toggle()">View</button>
+    <button mat-menu-item (click)="add.toggle()">Add</button>
+</mat-menu>
+</mat-toolbar>
+<mat-drawer-container class="example-container" autosize>
+    <mat-drawer #add class="example-sidenav" mode="side">
+<mat-sidenav-container class="example-container">
+    <mat-sidenav-content> <ng-containe *ngFor="let item of items">
+        <button mat-menu-item (click)="create(item)">Add {{item | titlecase}}</button>
+    </ng-containe></mat-sidenav-content>
+  </mat-sidenav-container>
+</mat-drawer>
+<mat-drawer #view class="example-sidenav" mode="side">
+    <mat-sidenav-container class="example-container">
+        <mat-sidenav-content> <ng-containe *ngFor="let item of items">
+            <button mat-menu-item (click)="read(item)">View {{item | titlecase}}</button>
+        </ng-containe></mat-sidenav-content>
+      </mat-sidenav-container>
+    </mat-drawer>
+<mea-template resource="template"></mea-template>
+</mat-drawer-container>

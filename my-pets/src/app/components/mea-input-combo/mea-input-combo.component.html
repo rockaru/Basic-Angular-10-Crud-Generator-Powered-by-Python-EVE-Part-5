@@ -1,7 +1,7 @@
 <mat-form-field  [formGroup]="myFormGroup" appearance="standard">
     <mat-label>{{key.name}}</mat-label>
     <mat-select formControlName="{{key.name}}" (selectionChange)="onSelected($event)" >
-        <mat-option *ngFor="let item of key.value.options[parent+key.name]" [value]="item._id||item">
+        <mat-option *ngFor="let item of key.meta.options[parent+key.name]" [value]="item._id||item">
             {{item.name||item}}
         </mat-option>
     </mat-select>
@@ -11,30 +11,30 @@
 
 <br>
 <ng-container [formGroup]="myFormGroup"  *ngIf="childForm">
-    <label id="label-{{key.value.child}}">{{key.value.child}}</label>
+    <label id="label-{{key.meta.child}}">{{key.meta.child}}</label>
     <br>
             <ng-container *ngFor="let child of childForm">
                 <ng-container [ngSwitch]="child.value.input">
 
-                    <mea-input-text *ngSwitchCase="'text'" [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-text>
-                    <mea-input-number *ngSwitchCase="'number'" [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-number>
-                    <mea-input-textarea *ngSwitchCase="'textarea'" [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-textarea>
-                    <mea-input-email *ngSwitchCase="'email'" [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-email>
-                    <mea-input-date *ngSwitchCase="'date'" [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-date>
-                    <mea-input-datetime *ngSwitchCase="'datetime'" [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-datetime>
-                    <mea-input-tel *ngSwitchCase="'tel'" [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-tel>
-                    <mea-input-password *ngSwitchCase="'password'" [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-password>
-                    <mea-input-url *ngSwitchCase="'url'" [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-url>
-                    <mea-input-image *ngSwitchCase="'image'" [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-image>
-                    <mea-input-file *ngSwitchCase="'file'" [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-file>
-                    <mea-input-checkbox *ngSwitchCase="'checkbox'" [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-checkbox>
-                    <mea-input-select *ngSwitchCase="'select'"  index='0' [parent]='child.name' [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-select>
-                    <mea-input-radio *ngSwitchCase="'selectradio'" [(options)]="key.value.allowed" [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-radio>
-                    <mea-input-list *ngSwitchCase="'list'" [parent]='key.name' [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-list>
-                    <mea-input-dual-list *ngSwitchCase="'selectmulti'" [parent]='key.name' index=0 [form-group]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-dual-list>
-                    <mea-input-multi *ngSwitchCase="'multi'" [parent]='key.name'  index=0 [(form-group)]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-multi>
-                    <mea-input-dict *ngSwitchCase="'dict'" [parent]='key.name'  index=0 [(form-group)]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-dict>
-                    <mea-input-combo *ngSwitchCase="'combo'" [parent]='key.name'  index=0 [(form-group)]="myFormGroup['controls'][key.value.child]" [key]="child"></mea-input-combo>
+                    <mea-input-text *ngSwitchCase="'text'" [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-text>
+                    <mea-input-number *ngSwitchCase="'number'" [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-number>
+                    <mea-input-textarea *ngSwitchCase="'textarea'" [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-textarea>
+                    <mea-input-email *ngSwitchCase="'email'" [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-email>
+                    <mea-input-date *ngSwitchCase="'date'" [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-date>
+                    <mea-input-datetime *ngSwitchCase="'datetime'" [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-datetime>
+                    <mea-input-tel *ngSwitchCase="'tel'" [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-tel>
+                    <mea-input-password *ngSwitchCase="'password'" [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-password>
+                    <mea-input-url *ngSwitchCase="'url'" [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-url>
+                    <mea-input-image *ngSwitchCase="'image'" [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-image>
+                    <mea-input-file *ngSwitchCase="'file'" [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-file>
+                    <mea-input-checkbox *ngSwitchCase="'checkbox'" [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-checkbox>
+                    <mea-input-select *ngSwitchCase="'select'"  index='0' [parent]='child.name' [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-select>
+                    <mea-input-radio *ngSwitchCase="'selectradio'" [(options)]="key.meta.allowed" [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-radio>
+                    <mea-input-list *ngSwitchCase="'list'" [parent]='key.name' [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-list>
+                    <mea-input-dual-list *ngSwitchCase="'selectmulti'" [parent]='key.name' index=0 [form-group]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-dual-list>
+                    <mea-input-multi *ngSwitchCase="'multi'" [parent]='key.name'  index=0 [(form-group)]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-multi>
+                    <mea-input-dict *ngSwitchCase="'dict'" [parent]='key.name'  index=0 [(form-group)]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-dict>
+                    <mea-input-combo *ngSwitchCase="'combo'" [parent]='key.name'  index=0 [(form-group)]="myFormGroup['controls'][key.meta.child]" [key]="child"></mea-input-combo>
                     
 
                 </ng-container>

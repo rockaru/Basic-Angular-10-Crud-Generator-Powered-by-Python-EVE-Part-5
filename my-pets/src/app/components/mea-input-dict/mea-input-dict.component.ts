@@ -14,6 +14,7 @@ export class MeaInputDictComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log(this.myFormGroup)
   }
 
  

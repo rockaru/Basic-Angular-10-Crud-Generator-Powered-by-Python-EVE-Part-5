@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class MeaViewCheckboxComponent implements OnInit {
   @Input() key:any
   @Input() item:any
+  @Input() showLabel=true
   constructor() { }
 
   ngOnInit(): void {

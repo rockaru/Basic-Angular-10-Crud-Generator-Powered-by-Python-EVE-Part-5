@@ -1,27 +1,5 @@
-<p>Status: {{live}}</p>
-<button (click)="read('dogs')">Open Dogs</button>
-<button (click)="create('dogs')">Add Dogs</button>
-<button (click)="read('dogBreeds')">Open Dog Breeds</button>
-<button (click)="create('dogBreeds')">Add Dog Breead</button>
-<button (click)="read('colors')">Open Colors</button>
-<button (click)="create('colors')">Add Colors</button>
-<button (click)="read('settings')">Open Settings</button>
-<button (click)="create('settings')">Add Settings</button>
-<div *ngIf="loading" class="overlay" style="height:100vh;
-width:100%;
-background-color:rgba(0, 0, 0, 0.286);
-z-index:    10;
-top:        0; 
-left:       0; 
-position:   fixed;">
-<div class="center" style="position: absolute;
-top: 50%;
-left: 50%;
--moz-transform: translateX(-50%) translateY(-50%);
--webkit-transform: translateX(-50%) translateY(-50%);
-transform: translateX(-50%) translateY(-50%);">
-    <mat-progress-spinner  mode="indeterminate" ></mat-progress-spinner>
 
-</div>
-</div>
-    
+<h1>{{title}}</h1>
+<p>Status: {{live}}</p>
+
+<router-outlet></router-outlet>

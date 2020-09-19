@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DataService } from 'src/app/data.service';
 import { FormService } from 'src/app/form.service';
-import { CreateComponent } from 'src/app/create/create.component';
+import { CreateDialogComponent } from 'src/app/create/create-dialog.component';
 
 @Component({
   selector: 'mea-input-dual-list',
@@ -20,37 +20,30 @@ export class MeaInputDualListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadOptions()
+     this.loadOptions()
 
   }
 
   async loadOptions() {
 
-    let items = JSON.parse(localStorage.getItem(`data-${this.key.value.schema.data_relation.resource}`))
-
-    if (!items) {
-      this.dataService.getAll(this.key.value.schema.data_relation.resource).subscribe(data => {
-        localStorage.setItem(`data-${this.key.value.schema.data_relation.resource}`, JSON.stringify(data["_items"]))
-
-        this.key.value.options[this.parent + this.key.name] = data["_items"]
+    this.dataService.getAll(this.key.meta.schema.data_relation.resource).subscribe(data => {
+        this.key.meta.options[this.parent + this.key.name] = data["_items"]
       })
-    } else {
-      this.key.value.options[this.parent + this.key.name] = items
-    }
+    
 
-    if (!this.key.value.selected[this.parent + this.key.name]) {
+    if (!this.key.meta.selected[this.parent + this.key.name]) {
 
 
-      this.key.value.selected[this.parent + this.key.name] = []
+      this.key.meta.selected[this.parent + this.key.name] = []
     } else {
 
-      const c = this.key.value.options[this.parent + this.key.name]
+      const c = this.key.meta.options[this.parent + this.key.name]
       for (let i = 0; i < c.length; i++) {
 
-        for (let j of this.key.value.selected[this.parent + this.key.name]) {
+        for (let j of this.key.meta.selected[this.parent + this.key.name]) {
           if (typeof c[i] !== 'undefined') {
             if (c[i]._id == j._id) {
-              this.key.value.options[this.parent + this.key.name].splice(i, 1)
+              this.key.meta.options[this.parent + this.key.name].splice(i, 1)
               i--
             }
           }
@@ -65,14 +58,14 @@ export class MeaInputDualListComponent implements OnInit {
 
   test(event) {
     console.log(event)
-    this.myFormGroup.get(this.key.name).patchValue(this.selectedItems(this.key.value.selected[this.parent + this.key.name]))
+    this.myFormGroup.get(this.key.name).patchValue(this.selectedItems(this.key.meta.selected[this.parent + this.key.name]))
     this.myFormGroup.get(this.key.name).updateValueAndValidity()
     this.myFormGroup.get(this.key.name).markAsTouched()
 
   }
 
   create(resource) {
-    this.formService.openCreate(resource, CreateComponent).afterClosed().subscribe(data => {
+    this.formService.openCreate(resource, CreateDialogComponent).afterClosed().subscribe(data => {
       this.loadOptions()
     })
 

@@ -1,3 +1,2 @@
-<mat-card-subtitle>{{key}}</mat-card-subtitle>
 
-<p [matTooltip]="key">{{item}}</p>
+<p [matTooltip]="key"><span style="font-size: 14px;color: rgba(0,0,0,.54);" *ngIf="showLabel">{{key}}</span> {{item}}</p>

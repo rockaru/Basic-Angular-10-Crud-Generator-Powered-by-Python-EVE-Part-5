@@ -1,7 +1,35 @@
-<ng-container [formGroup]="myFormGroup" appearance="standard">
+<mea-pre [show]="showPre" [key]="key"></mea-pre>
 
+<div [formGroup]="meaFg" appearance="standard" class="mea-checkbox-wrapper">
+    <div class="mea-border">
+        <div class="mea-checkbox">
+            <mat-checkbox formControlName="{{key.name}}">
 
-    <mat-icon matSuffix>filter_vintage</mat-icon>
-    <mat-checkbox formControlName="{{key.name}}">{{key.name}}</mat-checkbox>
+                <mat-label class="mea-checkbox-label" *ngIf="showLabel && key.meta.show_label.create">
+                    <span *ngIf="!key.meta.label">{{key.name}}</span>
+                    <span *ngIf="key.meta.label">{{key.meta.label}}</span>
+                    <span *ngIf="key.meta.required" style="color: red;"> *</span>
+                </mat-label>
 
-</ng-container>
+            </mat-checkbox>
+        </div>
+        <div class="mea-checkbox-icon">
+            <mat-icon *ngIf="showIcon && key.meta.show_icon.create" matSuffix>{{key.meta.icon}}</mat-icon>
+        </div>
+    </div>
+    <mat-hint class="mea-checkbox-hint" *ngIf="showHint  && key.meta.show_hint"> {{key.meta.hint}}</mat-hint>
+
+    <ng-container *ngIf="hasErrors()">
+        <mat-error *ngIf="isRequired()"><span *ngIf="!key.meta.label">{{key.name}}</span><span
+                *ngIf="key.meta.label">{{key.meta.label}}</span> is required.</mat-error>
+        <mat-error *ngIf="isMinLength()"><span *ngIf="!key.meta.label">{{key.name}}</span><span
+                *ngIf="key.meta.label">{{key.meta.label}}</span> must be at least {{key.meta.minlength}} characters
+            long.</mat-error>
+            <mat-error *ngIf="isMaxLength()">
+                <span *ngIf="!key.meta.label">{{key.name}}</span>
+                <span *ngIf="key.meta.label">{{key.meta.label}}</span> must be at most {{key.meta.maxlength}} characters
+                long.
+            </mat-error>
+    </ng-container>
+</div>
+<mea-after [show]="showAfter" [key]="key"></mea-after>

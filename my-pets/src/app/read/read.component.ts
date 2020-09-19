@@ -1,5 +1,4 @@
-import { Component, OnInit, Inject, AfterViewInit } from '@angular/core'
-import { MAT_DIALOG_DATA } from '@angular/material/dialog'
+import { Component, OnInit, Inject, AfterViewInit, Input } from '@angular/core'
 import { CreateComponent } from '../create/create.component'
 import { UpdateComponent } from '../update/update.component'
 import { DeleteComponent } from '../delete/delete.component'
@@ -7,36 +6,34 @@ import { DetailsComponent } from '../details/details.component'
 import { FormService } from '../form.service'
 import { DataService } from '../data.service'
 import { SocketService } from '../socket.service'
-import { SpinnerService } from '../spinner.service'
-import { UrlResolver } from '@angular/compiler'
-import { SafeUrl, DomSanitizer } from '@angular/platform-browser'
 
 @Component({
-  selector: 'app-read',
+  selector: 'mea-list',
   templateUrl: './read.component.html',
   styleUrls: ['./read.component.scss']
 })
 export class ReadComponent implements AfterViewInit, OnInit {
-  resource: string
   form: any = []
   items: any = []
-
+  scope='read'
+  panelOpenState=[]
+  @Input('details-route') detailsRoute:any 
+  @Input('route-param') routeParam:any
+  @Input() resource:string
   constructor(
     private socketService: SocketService,
     private dataService: DataService,
     private formService: FormService,
-    private spinnerService: SpinnerService,
 
-    @Inject(MAT_DIALOG_DATA) data
   ) {
-    this.resource = data.resource
-    this.form = data.form
-
-    socketService.joinSocket(this.resource)
+   
 
   }
 
   ngOnInit() {
+
+    this.form = this.formService.loadForm(this.resource,this.scope)
+
     this.loadData()
 
     this.socketService.webSocket.addEventListener("message", (ev) => {
@@ -45,26 +42,19 @@ export class ReadComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(){
-    this.spinnerService.changeState(true)
 
   }
 
-  async loadData() {
+  loadData() {
     
-    let items = JSON.parse(localStorage.getItem(`data-${this.resource}`))
+    this.dataService.getAll(this.resource).subscribe(data => {
+    this.socketService.joinSocket(this.resource)
+      
+      this.items = data["_items"]  
 
-    if (!items) {
-
-      this.dataService.getAll(this.resource).subscribe(data => {
-        localStorage.setItem(`data-${this.resource}`, JSON.stringify(data["_items"]))
-
-        this.items = data["_items"]
 
       })
-    } else {
-      this.items = items
-
-    }
+    
    
   }
 

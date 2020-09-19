@@ -1,0 +1,217 @@
+
+    <style>
+        * {
+          box-sizing: border-box;
+        }
+        
+        .row::after {
+          content: "";
+          clear: both;
+          display: table;
+        }
+        
+        [class*="col-"] {
+          float: left;
+          padding: 5px;
+          font-size: 1em!important;
+        }
+        
+        html {
+          font-family: "Lucida Sans", sans-serif;
+        }
+        
+        .header {
+          padding: 15px;
+          text-align: center;
+        }
+        
+        .menu ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+        }
+        
+        .menu li {
+          padding: 8px;
+          margin-bottom: 7px;
+          background-color: #33b5e5;
+          color: #ffffff;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+        
+        .menu li:hover {
+          background-color: #0099cc;
+        }
+        
+        .aside {
+          background-color: #33b5e5;
+          padding: 15px;
+          color: #ffffff;
+          text-align: center;
+          font-size: 14px;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+        
+        .footer {
+          background-color: #0099cc;
+          color: #ffffff;
+          text-align: center;
+          font-size: 12px;
+          padding: 15px;
+        }
+        
+        /* For mobile phones: */
+        [class*="col-"] {
+          width: 100%;
+          font-size: xx-small!important;
+    word-wrap: break-word !important;
+
+        }
+        
+        @media only screen and (min-width: 600px) {
+          /* For tablets: */
+          .col-s-1 {width: 8.33%; border: 1px solid;}
+          .col-s-2 {width: 16.66%;}
+          .col-s-3 {width: 25%;}
+          .col-s-4 {width: 33.33%;}
+          .col-s-5 {width: 41.66%;}
+          .col-s-6 {width: 50%;}
+          .col-s-7 {width: 58.33%;}
+          .col-s-8 {width: 66.66%;}
+          .col-s-9 {width: 75%;}
+          .col-s-10 {width: 83.33%;}
+          .col-s-11 {width: 91.66%;}
+          .col-s-12 {width: 100%;}
+        }
+        @media only screen and (min-width: 268px) {
+          /* For desktop: */
+          .col-1 {width: 8.33%;border: 1px solid !important;font-size: 1em!important;}
+          .col-2 {width: 16.66%;border: 1px solid !important;}
+          .col-3 {width: 25%;border: 1px solid !important;}
+          .col-4 {width: 33.33%;border: 1px solid !important;}
+          .col-5 {width: 41.66%;border: 1px solid !important;}
+          .col-6 {width: 50%;border: 1px solid !important;}
+          .col-61 {width: 50%; padding:0 !important;}
+          .col-7 {width: 58.33%;border: 1px solid !important;}
+          .col-8 {width: 66.66%;border: 1px solid !important;}
+          .col-9 {width: 75%;border: 1px solid !important;}
+          .col-10 {width: 83.33%;border: 1px solid !important;}
+          .col-11 {width: 91.66%;border: 1px solid !important;}
+          .col-12 {width: 100%;border: 1px solid !important;}
+        }
+        </style>
+        
+        
+        <div class="header">
+          <h1>Fisa lucrari zilnice</h1>
+        </div>
+        
+        
+            <div class="row">
+                <div class="col-1">Proiect</div>
+                <div class="col-5">{{item['proiect']}}</div>
+                <div class="col-1">Nr. Contract</div>
+                <div class="col-1">{{item['nr contract']}}</div>
+                <div class="col-1">Data</div>
+                <div class="col-1">&nbsp</div>
+                <div class="col-1">Pagina</div>
+                <div class="col-1">{{item['pagina']}}</div>
+            </div>
+        <br>
+        <div class="row">
+            <div class="col-1"><h4>A</h4></div>
+            <div class="col-5" style="text-align: center;"><h4>Antreprenori la lucrarre</h4></div>
+            <div class="col-1"><h4>B</h4></div>
+            <div class="col-5" style="text-align: center;"><h4>Operatiuni Executate</h4></div>
+        </div>
+        <div class="row">
+            <div class="col-1">Antreprenor G</div>
+            <div class="col-5">{{item['antreprenor G']}}</div>
+            <div class="col-1">Exterior</div>
+            <div class="col-1">{{item['conditii'].exterior}}</div>
+            <div class="col-1">Senin</div>
+            <div class="col-1">{{item['conditii'].senin}}</div>
+            <div class="col-1">Zapada</div>
+            <div class="col-1">{{item['conditii'].zapada}}</div>
+        </div>
+        <div class="row">
+            <div class="col-1">Subantreprenor</div>
+            <div class="col-5">{{item['subantreprenor']}}</div>
+            <div class="col-1">Interior</div>
+            <div class="col-1">{{item['conditii'].interior}}</div>
+            <div class="col-1">Innorat</div>
+            <div class="col-1">{{item['conditii'].innorat}}</div>
+            <div class="col-1">Ploaie</div>
+            <div class="col-1">{{item['conditii'].ploaie}}</div>
+        </div>
+        <div class="row">
+            <div class="col-1">Subantreprenor</div>
+            <div class="col-5">&nbsp</div>
+            <div class="col-1">Temperatura</div>
+            <div class="col-1">{{item['conditii'].temperatura}}</div>
+            <div class="col-1">Vant</div>
+            <div class="col-1">{{item['conditii'].vant}}</div>
+            <div class="col-1">Umiditate</div>
+            <div class="col-1">{{item['conditii'].umiditate}}</div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-1"><h4>C</h4></div>
+            <div class="col-4" style="text-align: center;"><h4>Personal la lucrarre</h4></div>
+            <div class="col-1"><h4>D</h4></div>
+            <div class="col-6" style="text-align: center;"><h4>Operatiuni Executate</h4></div>
+        </div>
+        <div class="row">
+            <div class="col-2">Nume</div>
+            <div class="col-1">De la ora</div>
+            <div class="col-1">La ora</div>
+            <div class="col-1">Total Ore</div>
+            <div class="col-5">Descrierea operatiunilor</div>
+            <div class="col-1">UM</div>
+            <div class="col-1">Cantitate</div>
+        </div>
+        <div class="row">
+            <div class="col-2">&nbsp</div>
+            <div class="col-1">&nbsp</div>
+            <div class="col-1">&nbsp</div>
+            <div class="col-1">&nbsp</div>
+            <div class="col-5">&nbsp</div>
+            <div class="col-1">&nbsp</div>
+            <div class="col-1">&nbsp</div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-1"><h4>E</h4></div>
+            <div class="col-3" style="text-align: center;"><h4>Materiale Folosite</h4></div>
+            <div class="col-1"><h4>UM</h4></div>
+            <div class="col-1"><h4>Cantitate</h4></div>
+            <div class="col-1"><h4>D</h4></div>
+            <div class="col-5" style="text-align: center;"><h4>Echipamente si utilaje folosite</h4></div>
+        </div>
+        <div class="row">
+            <div class="col-4">&nbsp</div>
+            <div class="col-1">&nbsp</div>
+            <div class="col-1">&nbsp</div>
+            <div class="col-5" style="text-align: center;">Echipament / Utilaj</div>
+            <div class="col-1">Ore</div>
+            
+        </div>
+        <div class="row">
+            <div class="col-61">
+                <div class="row">
+            <div class="col-8">&nbsp</div>
+            <div class="col-2">&nbsp</div>
+            <div class="col-2">&nbsp</div>
+        </div></div>
+        <div class="col-61">
+            <div class="row">
+            <div class="col-10">&nbsp</div>
+            <div class="col-2">&nbsp</div>
+        </div>
+        </div></div>
+        
+        <div class="footer">
+          <p>Resize the browser window to see how the content respond to the resizing.</p>
+        </div>
+        
+        

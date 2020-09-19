@@ -1,45 +1,103 @@
-
 <h2 mat-dialog-title>View {{resource}}</h2>
 <mat-dialog-content>
- 
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let item of items;let i=index" (opened)="panelOpenState[i] = true"
+      (closed)="panelOpenState[i] = false">
 
-  <mat-card  *ngFor="let item of items">
-    <mat-spinner *ngIf="!items"></mat-spinner>
-
+      <mat-expansion-panel-header>
         <ng-container *ngFor="let key of form">
-          
-            
-              <ng-container [ngSwitch]="key.value.input">
-               
-                 <mea-view-text *ngSwitchCase="'text'" [key]="key.name" [item]="item[key.name]"></mea-view-text>
-                 <mea-view-number *ngSwitchCase="'number'" [key]="key.name" [item]="item[key.name]"></mea-view-number>
-                 <mea-view-textarea *ngSwitchCase="'textarea'" [key]="key.name" [item]="item[key.name]"></mea-view-textarea>
-                 <mea-view-date *ngSwitchCase="'date'" [key]="key.name" [item]="item[key.name]"></mea-view-date>
-                 <mea-view-datetime *ngSwitchCase="'datetime'" [key]="key.name" [item]="item[key.name]"></mea-view-datetime>
-                 <mea-view-email *ngSwitchCase="'email'" [key]="key.name" [item]="item[key.name]"></mea-view-email>
-                 <mea-view-image *ngSwitchCase="'image'" [key]="key.name" [item]="item[key.name]"></mea-view-image>
-                 <mea-view-tel *ngSwitchCase="'tel'" [key]="key.name" [item]="item[key.name]"></mea-view-tel>
-                 <mea-view-url *ngSwitchCase="'url'" [key]="key.name" [item]="item[key.name]"></mea-view-url>
-                 <mea-view-radio *ngSwitchCase="'selectradio'" [key]="key.name" [item]="item[key.name]"></mea-view-radio>
-                 <mea-view-checkbox *ngSwitchCase="'checkbox'" [key]="key.name" [item]="item[key.name]"></mea-view-checkbox>
-                 <mea-view-select *ngSwitchCase="'select'" [key]="key" [item]="item[key.name]"></mea-view-select>
-                 <mea-view-multi *ngSwitchCase="'multi'" [title]="key.name" [form]="key.value.child" [item]="item[key.name]"></mea-view-multi>
-                
-                
-                
-                
-                
-                
-              </ng-container>
-            
-          
+          <mat-panel-title *ngIf="key.meta.title">
+
+
+            <ng-container [ngSwitch]="key.meta.input">
+
+              <mea-view-text *ngSwitchCase="'text'" [showLabel]='false' [key]="key.name" [item]="item[key.name]"></mea-view-text>
+              <mea-view-number *ngSwitchCase="'number'" [key]="key.name" [item]="item[key.name]"></mea-view-number>
+              <mea-view-textarea *ngSwitchCase="'textarea'" [showLabel]='false' [key]="key.name" [item]="item[key.name]">
+              </mea-view-textarea>
+              <mea-view-date *ngSwitchCase="'date'" [key]="key.name" [item]="item[key.name]"></mea-view-date>
+              <mea-view-datetime *ngSwitchCase="'datetime'" [key]="key.name" [item]="item[key.name]">
+              </mea-view-datetime>
+              <mea-view-email *ngSwitchCase="'email'" [key]="key.name" [item]="item[key.name]"></mea-view-email>
+              <mea-view-image *ngSwitchCase="'image'" [key]="key.name" [item]="item[key.name]"></mea-view-image>
+              <mea-view-tel *ngSwitchCase="'tel'" [key]="key.name" [item]="item[key.name]"></mea-view-tel>
+              <mea-view-url *ngSwitchCase="'url'" [key]="key.name" [item]="item[key.name]"></mea-view-url>
+              <mea-view-radio *ngSwitchCase="'selectradio'" [key]="key.name" [item]="item[key.name]"></mea-view-radio>
+              <mea-view-checkbox *ngSwitchCase="'checkbox'" [key]="key.name" [item]="item[key.name]">
+              </mea-view-checkbox>
+              <mea-view-select *ngSwitchCase="'select'" [key]="key" [item]="item[key.name]"></mea-view-select>
+              <mea-view-multi *ngSwitchCase="'multi'" [title]="key.name" [form]="key.meta.child"
+                [item]="item[key.name]"></mea-view-multi>
+
+
+
+
+
+            </ng-container>
+          </mat-panel-title>
+
+
         </ng-container>
-        <mat-card-actions>
-        <td><button mat-button color="primary" type="button" (click)="details(item)">Details</button></td>
+        <ng-container *ngFor="let key of form">
+          <mat-panel-description *ngIf="key.meta.desc">
+
+
+            <ng-container [ngSwitch]="key.meta.input">
+              <mea-view-text *ngSwitchCase="'text'" [showLabel]='false' [key]="key.name" [item]="item[key.name]"></mea-view-text>
+              <mea-view-number *ngSwitchCase="'number'" [key]="key.name" [item]="item[key.name]"></mea-view-number>
+              <mea-view-textarea *ngSwitchCase="'textarea'" [showLabel]='false' [key]="key.name" [item]="item[key.name]">
+              </mea-view-textarea>
+              <mea-view-date *ngSwitchCase="'date'" [key]="key.name" [item]="item[key.name]"></mea-view-date>
+              <mea-view-datetime *ngSwitchCase="'datetime'" [key]="key.name" [item]="item[key.name]">
+              </mea-view-datetime>
+              <mea-view-email *ngSwitchCase="'email'" [key]="key.name" [item]="item[key.name]"></mea-view-email>
+              <mea-view-image *ngSwitchCase="'image'" [key]="key.name" [item]="item[key.name]"></mea-view-image>
+              <mea-view-tel *ngSwitchCase="'tel'" [key]="key.name" [item]="item[key.name]"></mea-view-tel>
+              <mea-view-url *ngSwitchCase="'url'" [key]="key.name" [item]="item[key.name]"></mea-view-url>
+              <mea-view-radio *ngSwitchCase="'selectradio'" [key]="key.name" [item]="item[key.name]"></mea-view-radio>
+              <mea-view-checkbox *ngSwitchCase="'checkbox'" [key]="key.name" [item]="item[key.name]">
+              </mea-view-checkbox>
+              <mea-view-select *ngSwitchCase="'select'" [key]="key" [item]="item[key.name]"></mea-view-select>
+              <mea-view-multi *ngSwitchCase="'multi'" [title]="key.name" [form]="key.meta.child"
+                [item]="item[key.name]"></mea-view-multi>
+            </ng-container>
+          </mat-panel-description>
+
+        </ng-container>
+      </mat-expansion-panel-header>
+      <ng-container *ngFor="let key of form">
+
+        <ng-container *ngIf="!key.meta.desc && !key.meta.title">
+
+          <ng-container [ngSwitch]="key.meta.input">
+            <mea-view-text *ngSwitchCase="'text'" [key]="key.name" [item]="item[key.name]"></mea-view-text>
+            <mea-view-number *ngSwitchCase="'number'" [key]="key.name" [item]="item[key.name]"></mea-view-number>
+            <mea-view-textarea *ngSwitchCase="'textarea'" [key]="key.name" [item]="item[key.name]"></mea-view-textarea>
+            <mea-view-date *ngSwitchCase="'date'" [key]="key.name" [item]="item[key.name]"></mea-view-date>
+            <mea-view-datetime *ngSwitchCase="'datetime'" [key]="key.name" [item]="item[key.name]"></mea-view-datetime>
+            <mea-view-email *ngSwitchCase="'email'" [key]="key.name" [item]="item[key.name]"></mea-view-email>
+            <mea-view-image *ngSwitchCase="'image'" [key]="key.name" [item]="item[key.name]"></mea-view-image>
+            <mea-view-tel *ngSwitchCase="'tel'" [key]="key.name" [item]="item[key.name]"></mea-view-tel>
+            <mea-view-url *ngSwitchCase="'url'" [key]="key.name" [item]="item[key.name]"></mea-view-url>
+            <mea-view-radio *ngSwitchCase="'selectradio'" [key]="key.name" [item]="item[key.name]"></mea-view-radio>
+            <mea-view-checkbox *ngSwitchCase="'checkbox'" [key]="key.name" [item]="item[key.name]"></mea-view-checkbox>
+            <mea-view-select *ngSwitchCase="'select'" [key]="key" [item]="item[key.name]"></mea-view-select>
+            <!--<mea-view-multi *ngSwitchCase="'multi'" [title]="key.name" [form]="key.meta.child" [item]="item[key.name]"></mea-view-multi>-->
+          </ng-container>
+        </ng-container>
+      </ng-container>
+        <ng-container *ngIf="detailsRoute">
+          <td><button mat-button color="primary" type="button"
+              [routerLink]="detailsRoute+resource+'/'+item[routeParam]">Details</button></td>
+        </ng-container>
+        <ng-container *ngIf="!detailsRoute">
+
+          <td><button mat-button color="primary" type="button" (click)="details(item)">Details</button></td>
+        </ng-container>
         <td><button mat-button color="primary" type="button" (click)="update(item)">Update</button></td>
         <td><button mat-button color="warn" type="button" (click)="delete(item)">Delete</button></td>
-      </mat-card-actions>
-      </mat-card>
+    </mat-expansion-panel>
+  </mat-accordion>
 </mat-dialog-content>
 
 <mat-dialog-actions>

@@ -1,8 +1,8 @@
 <br/><label id="label-{{key.name}}">{{key.name}}</label>
-<button mat-icon-button matSuffix (click)="create(key.value.schema.data_relation.resource)" >
+<button mat-icon-button matSuffix (click)="create(key.meta.schema.data_relation.resource)" >
     <mat-icon>note_add</mat-icon>
 </button>
-<material-dual-listbox [(source)]="key.value.options[parent+key.name]" [filter]="true"
-        [(destination)]="key.value.selected[parent+key.name]"
+<material-dual-listbox [(source)]="key.meta.options[parent+key.name]" [filter]="true"
+        [(destination)]="key.meta.selected[parent+key.name]"
         (destinationChange)="test($event)">
     </material-dual-listbox>

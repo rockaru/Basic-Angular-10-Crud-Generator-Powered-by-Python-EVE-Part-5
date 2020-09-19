@@ -1,0 +1,29 @@
+.mea-border {
+    border-bottom: 1px solid rgb(148 148 148);
+    display: inline-flex;
+}
+
+.mea-border:hover {
+    border-bottom: 2px solid rgb(0 0 0);
+    margin-bottom: -1px;
+}
+
+.mea-checkbox-wrapper {
+    display: inline-block;
+    position: relative;
+    text-align: left;
+}
+.mea-checkbox{
+    width: 180px;
+}
+.mea-checkbox-label{
+    color: rgba(0,0,0,.6);
+}
+.mea-checkbox-icon{
+    width: 24px;
+}
+.mea-checkbox-hint{
+    display: block;    font-size: 75%;
+margin-top: 0.2em;
+top: calc(100% - 1.7916666667em);
+}

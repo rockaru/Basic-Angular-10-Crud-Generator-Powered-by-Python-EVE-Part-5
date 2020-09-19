@@ -1,9 +1,4 @@
-.radio-group {
-    display: flex;
-    flex-direction: column;
-    margin: 15px 0;
-  }
+mat-chip-list > .mat-chip-list-wrapper{
+    display: inline-flex !important;
+}
   
-  .radio-button {
-    margin: 5px;
-  }

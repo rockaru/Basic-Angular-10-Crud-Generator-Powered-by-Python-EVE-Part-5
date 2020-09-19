@@ -7,17 +7,41 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./mea-input-file.component.scss']
 })
 export class MeaInputFileComponent implements OnInit {
+  @Input('form-group') meaFg: FormGroup
+  @Input() key:any
+ 
+  @Input() showPre =true
+  @Input() showAfter = true
+  @Input() showLabel =true
+  @Input() showHint = true
+  @Input() showIcon = true
+  selectedFiles: any
 
   constructor() { }
-  @Input('form-group') myFormGroup: FormGroup
-  @Input() key:any
-  selectedFiles: any
+  
+  
   ngOnInit(): void {
   }
+
+  hasErrors(){
+    return (this.meaFg.get(this.key.name).invalid && (this.meaFg.get(this.key.name).dirty || this.meaFg.get(this.key.name).touched))
+  }
+
+  isRequired(){
+    return (this.meaFg.get(this.key.name).errors.required)
+  }
+
+  isMinLength(){
+    return (this.meaFg.get(this.key.name).errors.minlength)
+  }
+  isMaxLength(){
+    return (this.meaFg.get(this.key.name).errors.maxlength)
+  }
+
   uploadFile(event, form) {
     const file = (event.target as HTMLInputElement).files[0];
-    this.myFormGroup.get(form).patchValue(file)
-    this.myFormGroup.get(form).updateValueAndValidity()
+    this.meaFg.get(form).patchValue(file)
+    this.meaFg.get(form).updateValueAndValidity()
     this.selectedFiles = event.target.files;
   }
 }

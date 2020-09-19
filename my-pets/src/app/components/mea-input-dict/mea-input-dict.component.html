@@ -1,8 +1,8 @@
 <ng-container [formGroup]="myFormGroup" >
     <label id="label-{{key.name}}">{{key.name}}</label>
     
-            <ng-container *ngFor="let child of key.value.child">
-                <ng-container [ngSwitch]="child.value.input">
+            <ng-container *ngFor="let child of key.meta.child">
+                <ng-container [ngSwitch]="child.meta.input">
 
 
                     <mea-input-number *ngSwitchCase="'number'"
@@ -33,7 +33,7 @@
                 <mea-input-select *ngSwitchCase="'select'" [parent]='parent+i' [index]="i"
                     [form-group]="myFormGroup" [key]="child"></mea-input-select>
 
-                <mea-input-dual-list *ngSwitchCase="'selectmulti'" [parent]='parent+i' [index]="i"
+                <mea-input-dual-list *ngSwitchCase="'dual_list'" [parent]='parent+i' [index]="i"
                     [form-group]="myFormGroup" [key]="child"></mea-input-dual-list>
 
 

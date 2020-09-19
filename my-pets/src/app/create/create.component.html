@@ -1,40 +1,120 @@
-<h2 mat-dialog-title>Add {{resource | titlecase}}</h2>
+<style>
+    .input{
+        padding-right: 10px;
+    }
+    .input:last-child{
+        padding-right: 0;
+    }
+    .mat-chip-list-wrapper{
+    display: inline-flex !important;
+}
+</style>
+<mat-toolbar *ngIf="dialog" color="primary" cdkDragRootElement=".cdk-overlay-pane" 
+cdkDragHandle cdkDrag>
+    <span>{{meta.title | titlecase}}</span>
+    <span style="flex: 1 1 auto;"></span>
+    <button mat-icon-button matSuffix (click)="showTitles = !showTitles" [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="showTitles">
+        <mat-icon>{{showTitles ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+    <button mat-icon-button matDialogClose>
+      <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+<mat-dialog-content class="mat-typography" style="align-items: center;text-align: center;margin:10px;">
+    <h2 *ngIf="!dialog" mat-dialog-title>{{meta.title | titlecase}}</h2>
+        <div  *ngIf="showTitles && meta.show_titles" style=" display: inline-flex;">
+            <div *ngFor="let title of meta.page_titles; let i = index">
+    
+                <span style="width: 10px;"></span>
+    
+                <button mat-button color="primary" selected *ngIf="title==meta.page_titles[page-1]">{{title}}</button>
 
-<mat-dialog-content>
-
-    <form [formGroup]="myFormGroup">
-
-        <div *ngFor="let key of form">
-            <div [ngSwitch]="key.value.input">
-                <mea-input-text *ngSwitchCase="'text'" [form-group]="myFormGroup" [key]="key"></mea-input-text>
-                <mea-input-number *ngSwitchCase="'number'" [form-group]="myFormGroup" [key]="key"></mea-input-number>
-                <mea-input-textarea *ngSwitchCase="'textarea'" [form-group]="myFormGroup" [key]="key"></mea-input-textarea>
-                <mea-input-email *ngSwitchCase="'email'" [form-group]="myFormGroup" [key]="key"></mea-input-email>
-                <mea-input-date *ngSwitchCase="'date'" [form-group]="myFormGroup" [key]="key"></mea-input-date>
-                <mea-input-datetime *ngSwitchCase="'datetime'" [form-group]="myFormGroup" [key]="key"></mea-input-datetime>
-                <mea-input-tel *ngSwitchCase="'tel'" [form-group]="myFormGroup" [key]="key"></mea-input-tel>
-                <mea-input-password *ngSwitchCase="'password'" [form-group]="myFormGroup" [key]="key"></mea-input-password>
-                <mea-input-url *ngSwitchCase="'url'" [form-group]="myFormGroup" [key]="key"></mea-input-url>
-                <mea-input-image *ngSwitchCase="'image'" [form-group]="myFormGroup" [key]="key"></mea-input-image>
-                <mea-input-file *ngSwitchCase="'file'" [form-group]="myFormGroup" [key]="key"></mea-input-file>
-                <mea-input-checkbox *ngSwitchCase="'checkbox'" [form-group]="myFormGroup" [key]="key"></mea-input-checkbox>
-                <mea-input-select *ngSwitchCase="'select'"  index='0' [parent]='key.name' [form-group]="myFormGroup" [key]="key"></mea-input-select>
-                <mea-input-radio *ngSwitchCase="'selectradio'" [(options)]="key.value.allowed" [form-group]="myFormGroup" [key]="key"></mea-input-radio>
-                <mea-input-list *ngSwitchCase="'list'" [parent]='key.name' [form-group]="myFormGroup" [key]="key"></mea-input-list>
-                <mea-input-dual-list *ngSwitchCase="'selectmulti'" [parent]='key.name' index=0 [form-group]="myFormGroup" [key]="key"></mea-input-dual-list>
-                <mea-input-multi *ngSwitchCase="'multi'" [parent]='key.name'  index=0 [(form-group)]="myFormGroup" [key]="key"></mea-input-multi>
-                <mea-input-dict *ngSwitchCase="'dict'" [parent]='key.name'  index=0 [(form-group)]="myFormGroup" [key]="key"></mea-input-dict>
-                <mea-input-combo *ngSwitchCase="'combo'" [parent]='key.name'  index=0 [(form-group)]="myFormGroup" [key]="key"></mea-input-combo>
-               
+                <ng-container *ngIf="meta.navigation">
+                    <button mat-button *ngIf="title!=meta.page_titles[page-1]" (click)="goToPage(i+1)">{{title}}</button>
+            </ng-container>
+            <ng-container *ngIf="!meta.navigation">
+                <button mat-button *ngIf="title!=meta.page_titles[page-1]">{{title}}</button>
+            </ng-container>
             </div>
         </div>
-    </form>
+    
+        
+
+
+        
+        <form [formGroup]="meaFg">
+    <h2 *ngIf="meta.page_titles">{{meta.page_titles[page-1]}}</h2>
+            
+        
+            <ng-container *ngFor="let key of form">
+                <ng-container *ngIf="key.meta.form_page==page || !key.meta.form_page">
+
+                    <ng-container [ngSwitch]="key.meta.input">
+                        <mea-input-text class="input" *ngSwitchCase="'text'" [form-group]="meaFg" [key]="key"></mea-input-text>
+                        <mea-input-number class="input" *ngSwitchCase="'number'" [form-group]="meaFg" [key]="key">
+                        </mea-input-number>
+                        <mea-input-textarea class="input" *ngSwitchCase="'textarea'" [form-group]="meaFg" [key]="key">
+                        </mea-input-textarea>
+                        <mea-input-email class="input" *ngSwitchCase="'email'" [form-group]="meaFg" [key]="key">
+                        </mea-input-email>
+                        <mea-input-date class="input" *ngSwitchCase="'date'" [form-group]="meaFg" [key]="key"></mea-input-date>
+                        <mea-input-time class="input" *ngSwitchCase="'time'" [form-group]="meaFg" [key]="key"></mea-input-time>
+                        <mea-input-datetime class="input" *ngSwitchCase="'datetime'" [form-group]="meaFg" [key]="key">
+                        </mea-input-datetime>
+                        <mea-input-tel class="input" *ngSwitchCase="'tel'" [form-group]="meaFg" [key]="key"></mea-input-tel>
+                        <mea-input-password class="input" *ngSwitchCase="'password'" [form-group]="meaFg" [key]="key">
+                        </mea-input-password>
+                        <mea-input-url class="input" *ngSwitchCase="'url'" [form-group]="meaFg" [key]="key"></mea-input-url>
+                        <mea-input-image class="input" *ngSwitchCase="'image'" [form-group]="meaFg" [key]="key">
+                        </mea-input-image>
+                        <mea-input-file class="input" *ngSwitchCase="'file'" [form-group]="meaFg" [key]="key"></mea-input-file>
+                        <mea-input-checkbox class="input" *ngSwitchCase="'checkbox'" [form-group]="meaFg" [key]="key">
+                        </mea-input-checkbox>
+                        <mea-input-select class="input" *ngSwitchCase="'select_collection'" [resources]="resources" index='0'
+                            [parent]='key.name' [form-group]="meaFg" [key]="key"></mea-input-select>
+                        <mea-input-radio class="input" *ngSwitchCase="'radio_list'" [(options)]="key.meta.allowed"
+                            [form-group]="meaFg" [key]="key"></mea-input-radio>
+                        <mea-input-list class="input" *ngSwitchCase="'list'" [parent]='key.name' [form-group]="meaFg"
+                            [key]="key"></mea-input-list>
+                        <mea-input-dual-list class="input" *ngSwitchCase="'dual_list'" [parent]='key.name' index=0
+                            [form-group]="meaFg" [key]="key"></mea-input-dual-list>
+                        <mea-input-multi class="input" *ngSwitchCase="'multi'" [parent]='key.name' index=0
+                            [(form-group)]="meaFg" [key]="key"></mea-input-multi>
+                        <mea-input-dict class="input" *ngSwitchCase="'dict'" [parent]='key.name' index=0
+                            [(form-group)]="meaFg['controls'][key.name]" [key]="key"></mea-input-dict>
+                        <mea-input-combo class="input" *ngSwitchCase="'combo'" [parent]='key.name' index=0
+                            [(form-group)]="meaFg" [key]="key"></mea-input-combo>
+                        <mea-input-richtext class="input" *ngSwitchCase="'richtext'" [parent]='key.name' index=0
+                            [(form-group)]="meaFg" [key]="key"></mea-input-richtext>
+
+                    </ng-container>
+
+                </ng-container>
+            </ng-container>
+        </form>
+
+
+    
 
 </mat-dialog-content>
-
 <mat-dialog-actions>
+    
+    <ng-container *ngIf="page<meta.pages">
+        <button mat-raised-button *ngIf="meta.navigation" color="primary" (click)="next()">Next</button>
 
-    <button mat-raised-button color="accent" (click)="save()">Save</button>
-    <button mat-button type="button" color="primary" matDialogClose>Close</button>
+        <button mat-raised-button *ngIf="!meta.navigation" color="primary" [disabled]="!checkValid()" (click)="next()">Next</button>
+    </ng-container>
+    <ng-container *ngIf="page>1&&page<=meta.pages">
+        <button *ngIf="meta.navigation" mat-button color="primary" (click)="back()">Back</button>
+    
+    </ng-container>
+    <span style="flex: 1 1 auto;"></span>
+
+    <ng-container *ngIf="page==meta.pages">
+
+        <button mat-raised-button color="accent" (click)="preSave()">Save</button>
+    </ng-container>
+    <button *ngIf="dialog" mat-button type="button" color="warn" matDialogClose><mat-icon>close</mat-icon> Close</button>
 
 </mat-dialog-actions>

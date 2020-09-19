@@ -9,26 +9,30 @@ import { DataService } from 'src/app/data.service';
 export class MeaViewSelectComponent implements OnInit {
   @Input() key:any
   @Input() item:any
+  items=[]
   constructor(
     private dataService:DataService
-  ) { }
+  ) {
+    
+   }
 
-  ngOnInit(): void {
+  ngOnInit(){
+   
+    this.loadData()
+    
+  }
+
+  loadData(){
+    this.dataService.getAll(this.key.value.data_relation.resource).subscribe(data => {
+
+      this.items = data["_items"]
+    })
   }
 
   loadItem(item){
-    
-    let items = JSON.parse(localStorage.getItem(`data-${this.key.value.data_relation.resource}`))
+  
 
-      if (!items) {
-        this.dataService.getAll(this.key.value.data_relation.resource).subscribe(data => {
-          localStorage.setItem(`data-${this.key.value.data_relation.resource}`, JSON.stringify(data["_items"]))
-
-          const items = data["_items"]
-        })
-      } 
-
-      for(let x of items){
+      for(let x of this.items){
         if(x._id == item){
          return x.name
         }
